@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 function EntryForm({ onEntryAdded }) {
+
   const [formData, setFormData] = useState({
     Quantity: "",
     Unit: "",
@@ -22,7 +23,9 @@ function EntryForm({ onEntryAdded }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await fetch("http://localhost:8080/submit.php", {
+    const response = await fetch("/api/submit.php", {
+
+
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: new URLSearchParams(formData),
@@ -59,6 +62,7 @@ function EntryForm({ onEntryAdded }) {
         <button type="submit" className="submit-btn">Submit</button>
       </form>
     </center>
+    
   );
 }
 

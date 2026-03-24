@@ -4,7 +4,7 @@ function ViewEntries() {
   const [entries, setEntries] = useState([]);
 
   const fetchEntries = () => {
-    fetch("http://localhost:8080/get_entries.php")
+    fetch("/api/get_entries.php")
       .then((res) => res.json())
       .then((data) => {
         console.log("Fetched entries:", data);

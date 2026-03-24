@@ -1,0 +1,122 @@
+:root {
+    
+    --main-font: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    --primary-color: hsl(229, 75%, 28%);
+    --padding: 15px;
+
+    --medium-size-font-weight: 600;
+
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+}
+
+* {
+    font-family: var(--main-font);
+}
+
+input {
+    padding: var(--padding);
+    letter-spacing: 0.1px;
+    font-size: 15px;
+    font-weight: 500;
+    margin: 10px;
+    border: 1px solid hsla(229, 74%, 38%, 0.486);
+    border-radius: 5px;
+    color: hsl(229, 60%, 37%);
+    transition: outline 0.3s, border-color 0.3s, box-shadow 0.3s;
+    
+}
+
+input:focus {
+    outline: none;
+    border-color: hsl(229, 75%, 28%);
+    box-shadow: 0 0 5px hsl(229, 75%, 28%);
+}
+
+button {
+    padding: 20px 30px;
+    margin: 10px;
+    border: none;
+    border-radius: 5px;
+    /* background-color: hsl(229, 75%, 28%); */
+    background: none;
+    border: 1px solid hsl(229, 75%, 28%);
+    color: hsl(229, 75%, 28%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    width: 150px;
+    height: 30px;
+    text-align: center;
+    cursor: pointer;
+    font-weight: var(--medium-size-font-weight);
+    transition: color 0.3s ease, background-color 0.3s, box-shadow 0.3s;
+}
+
+button:hover {
+    color: #f4f4f9;
+    background-color: hsl(229, 75%, 38%);
+    box-shadow: 0 0 10px hsl(229, 75%, 38%);
+}
+
+.loginHeader {
+    color: hsl(229, 75%, 28%);
+    font-weight: 550;
+    font-size: 2.1rem;
+    
+}
+
+.mainContainer {
+
+    border-radius: 20px;
+    box-shadow: 0px 0px 0px 4px rgba(0, 0, 0, 0.18%);
+    background-color: #d4d4d4;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    grid-template-rows: 1fr;
+    width: 900px;
+    height: 450px;
+
+}
+
+.imgContainer {
+    background-image: url('./src/assets/imgTwo.png');
+    background-size: cover;
+    background-position: center;
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+    width: 560px;
+    z-index: 2;
+    background-color: hsl(229, 75%, 28%);
+    
+
+}
+
+.loginPanel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 350px;
+    background-size: cover;
+    background-color: #f4f4f9;
+    border-radius: 0px 20px 20px 0px;
+}
+
+.loginContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+
+    background-color: #e6e6e6;
+    z-index: 1;
+}
+/* @media screen(min-width:23.75rem) {
+    .mainContainer {
+        width: 600px;
+        height: 300px;
+    }
+    
+} */
