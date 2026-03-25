@@ -1,4 +1,5 @@
 import { useState } from "react";
+import styles from "./css/EntryForm.module.css";
 
 function EntryForm({ onEntryAdded }) {
 
@@ -45,24 +46,27 @@ function EntryForm({ onEntryAdded }) {
   };
 
   return (
-    <center>
-      <form onSubmit={handleSubmit} className="entry-form">
-        <input name="Quantity" type="number" placeholder="Quantity" value={formData.Quantity} onChange={handleChange} />
-        <input name="Unit" placeholder="Unit" value={formData.Unit} onChange={handleChange} />
-        <input name="Amount" type="number" step="0.01" placeholder="Amount" value={formData.Amount} onChange={handleChange} />
-        <input name="UnitCost" type="number" step="0.01" placeholder="Unit Cost" value={formData.UnitCost} onChange={handleChange} />
-        <input name="TotalCost" type="number" step="0.01" placeholder="Total Cost" value={formData.TotalCost} onChange={handleChange} />
-        <input name="Description" placeholder="Description" value={formData.Description} onChange={handleChange} />
-        <input name="Item" placeholder="Item" value={formData.Item} onChange={handleChange} />
-        <input name="SerialNo" placeholder="Serial No." value={formData.SerialNo} onChange={handleChange} />
-        <input name="DateAcquired" type="date" placeholder="Date Acquired" value={formData.DateAcquired} onChange={handleChange} />
-        <input name="Location" placeholder="Location" value={formData.Location} onChange={handleChange} />
-        <input name="InventoryItemNo" placeholder="Inventory Item No." value={formData.InventoryItemNo} onChange={handleChange} />
-        <input name="EstimatedUsefulLife" placeholder="Estimated Useful Life" value={formData.EstimatedUsefulLife} onChange={handleChange} />
-        <button type="submit" className="submit-btn">Submit</button>
-      </form>
-    </center>
-    
+    <div className={styles.mainContainer}> 
+      <div className="entryFormContainer">
+        <div className="entryFormTable">
+            <form onSubmit={handleSubmit} className="submit">
+              <input name="Quantity" type="number" placeholder="Quantity" value={formData.Quantity} onChange={handleChange}/>
+              <input name="Unit" placeholder="Unit" value={formData.Unit} onChange={handleChange} />
+              <input name="Amount" type="number" step="0.01" placeholder="Amount" value={formData.Amount} onChange={handleChange} />
+              <input name="UnitCost" type="number" step="0.01" placeholder="Unit Cost" value={formData.UnitCost} onChange={handleChange} />
+              <input name="TotalCost" type="number" step="0.01" placeholder="Total Cost" value={formData.TotalCost} onChange={handleChange} />
+              <input name="Description" placeholder="Description" value={formData.Description} onChange={handleChange} />
+              <input name="Item" placeholder="Item" value={formData.Item} onChange={handleChange} />
+              <input name="SerialNo" placeholder="Serial No." value={formData.SerialNo} onChange={handleChange} />
+              <input name="DateAcquired" type="date" placeholder="Date Acquired" value={formData.DateAcquired} onChange={handleChange} />
+              <input name="Location" placeholder="Location" value={formData.Location} onChange={handleChange} />
+              <input name="InventoryItemNo" placeholder="Inventory Item No." value={formData.InventoryItemNo} onChange={handleChange} />
+              <input name="EstimatedUsefulLife" placeholder="Estimated Useful Life" value={formData.EstimatedUsefulLife} onChange={handleChange} />
+              <button type="submit" className="submit-btn">Submit</button>
+            </form>    
+        </div>
+      </div>
+    </div>    
   );
 }
 

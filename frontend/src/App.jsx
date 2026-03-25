@@ -2,8 +2,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import EntryForm from "./EntryForm";
 import ViewEntries from "./ViewEntries";
 import LoginForm from "./LoginForm"; // create this component
-import "./App.css";
 import Connect from "./Connect";
+import Header from "./Header";
 
 function App() {
   return (
@@ -19,7 +19,7 @@ function App() {
           path="/entry"
           element={
             <div>
-              <center><h1>Simple ICS System</h1></center>
+              <Header />
               <EntryForm />
               <hr />
               <ViewEntries />

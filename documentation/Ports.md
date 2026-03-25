@@ -10,5 +10,6 @@
    pass: rootpassword
 ```
 
+
 ---------------------------------
 ##  phpMyAdmin: localhost:8086

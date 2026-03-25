@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import styles from "./css/ViewEntries.module.css";
 
 function ViewEntries() {
   const [entries, setEntries] = useState([]);
@@ -20,9 +21,11 @@ function ViewEntries() {
   }, []);
 
   return (
-    <div className="table-wrapper">
-    <table className="entries-table">
-        <thead>
+    <div className={styles.mainContainer}>
+    <div className={styles.wrapper}>
+      <table className={styles.entryTable}>
+
+        <thead className={styles.tableHead}>
         <tr>
             <th>ID</th>
             <th>Quantity</th>
@@ -40,7 +43,7 @@ function ViewEntries() {
         </tr>
         </thead>
         <tbody>
-        {entries.length > 0 ? (
+         {entries.length > 0 ? (
             entries.map((entry) => (
             <tr key={entry.order_id}>
                 <td>{entry.order_id}</td>
@@ -66,7 +69,14 @@ function ViewEntries() {
         </tbody>
     </table>
     </div>
+    </div>
+    
   );
 }
 
 export default ViewEntries;
+
+
+
+    
+
