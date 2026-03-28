@@ -1,0 +1,233 @@
+:root {
+  --primary: hsl(229, 75%, 28%);
+  --primary-light: hsl(229, 75%, 38%);
+  --accent: #667eea;
+  --text-light: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.8);
+  --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.15);
+  --transition: all 0.3s ease;
+}
+
+* {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', sans-serif;
+}
+
+.headerContainer {
+  background: var(--primary);
+  color: var(--text-light);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.headerContent {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.brandSection {
+  flex: 1;
+  min-width: 250px;
+}
+
+.title {
+  font-size: 26px;
+  margin: 0 0 6px 0;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  transition: var(--transition);
+}
+
+.title:hover {
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.subtitle {
+  font-size: 13px;
+  margin: 0;
+  opacity: 0.9;
+  font-weight: 400;
+  letter-spacing: 0.3px;
+}
+
+/* User Section */
+.userSection {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.userInfo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 150px;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.userDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.userName {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0;
+  color: var(--text-light);
+}
+
+.userRole {
+  font-size: 12px;
+  margin: 0;
+  color: var(--text-secondary);
+  font-weight: 500;
+  opacity: 0.85;
+}
+
+.logoutBtn {
+  background: rgba(255, 255, 255, 0.2);
+  color: var(--text-light);
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  transition: var(--transition);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  white-space: nowrap;
+}
+
+.logoutBtn:hover {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: var(--text-light);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.logoutBtn:active {
+  transform: translateY(0);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .headerContent {
+    padding: 16px 24px;
+    gap: 15px;
+  }
+
+  .title {
+    font-size: 22px;
+  }
+
+  .subtitle {
+    font-size: 12px;
+  }
+
+  .userSection {
+    gap: 12px;
+    padding: 8px 12px;
+  }
+
+  .userInfo {
+    gap: 10px;
+    min-width: auto;
+  }
+
+  .avatar {
+    width: 36px;
+    height: 36px;
+    font-size: 14px;
+  }
+
+  .userName {
+    font-size: 13px;
+  }
+
+  .userRole {
+    font-size: 11px;
+  }
+
+  .logoutBtn {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .headerContent {
+    padding: 12px 16px;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .brandSection {
+    width: 100%;
+  }
+
+  .title {
+    font-size: 18px;
+    margin-bottom: 4px;
+  }
+
+  .subtitle {
+    font-size: 11px;
+  }
+
+  .userSection {
+    width: 100%;
+    justify-content: space-between;
+    padding: 8px 12px;
+  }
+
+  .userDetails {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .userName {
+    font-size: 12px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .userRole {
+    font-size: 10px;
+  }
+
+  .logoutBtn {
+    padding: 6px 10px;
+    font-size: 11px;
+  }
+}
+
