@@ -1,0 +1,625 @@
+:root {
+  --primary: hsl(229, 75%, 28%);
+  --accent: #667eea;
+  --text-light: #f4f4f9;
+  --text-dark: #333;
+  --border: #e5e7eb;
+  --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.15);
+  --transition: all 0.3s ease;
+  --radius: 8px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', sans-serif;
+  transition: var(--transition);
+}
+
+body, html {
+  width: 100%;
+  height: 100vh;
+}
+
+/* Desktop Navbar */
+.mainNav {
+  display: flex;
+  flex-direction: column;
+  color: var(--text-light);
+  justify-content: flex-start;
+  height: 100vh;
+  width: 140px;
+  background: var(--primary);
+  z-index: 100;
+  box-shadow: 4px 0 12px rgba(0, 0, 0, 0.1);
+  overflow-y: hidden;
+  position: fixed;
+  left: 0;
+  top: 0;
+  transition: width 0.3s ease;
+  padding: 20px 0;
+}
+
+.mainNav.collapsed {
+  width: 80px;
+}
+
+.navWrapper {
+  z-index: 2;
+  flex: 1;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+  display: flex;
+  flex-direction: column;
+}
+
+.navWrapper::-webkit-scrollbar {
+  width: 6px;
+}
+
+.navWrapper::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.navWrapper::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+}
+
+.navWrapper::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Profile Section */
+.profileContainer {
+  height: 100px;
+  width: 100px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 3px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  border-radius: 50%;
+  margin: 0 auto 30px;
+  z-index: 1000;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  transition: var(--transition);
+  overflow: hidden;
+}
+
+.profileContainer:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+}
+
+.profileWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.profileInitial {
+  font-size: 40px;
+  font-weight: 700;
+  color: var(--text-light);
+  text-align: center;
+}
+
+.profileName {
+  font-size: 11px;
+  font-weight: 600;
+  margin-top: 6px;
+  text-align: center;
+  opacity: 0.8;
+  word-break: break-word;
+}
+
+/* Panel Container */
+.panelContainer {
+  margin: 20px auto 0;
+  width: 100%;
+}
+
+.panelWrapper {
+  padding: 0 10px;
+}
+
+.panelContents ul {
+  list-style: none;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+ul li {
+  position: relative;
+  text-decoration: none;
+}
+
+/* Navigation Items */
+.navItem {
+  position: relative;
+}
+
+.navButton {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 12px 10px;
+  background: transparent;
+  color: var(--text-light);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 13px;
+  transition: var(--transition);
+  text-decoration: none;
+  white-space: nowrap;
+  position: relative;
+}
+
+.navButton:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: scale(1.1);
+}
+
+.navButton:active {
+  transform: scale(0.95);
+}
+
+.addEntryBtn {
+  background: var(--accent);
+  margin-top: auto;
+  border: none;
+  box-shadow: var(--shadow);
+  transition: var(--transition);
+}
+
+.addEntryBtn:hover {
+  background: #5a6fd3;
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+
+.addEntryBtn:active {
+  transform: translateY(0);
+}
+
+.icon {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+}
+
+.collapseBtnImg {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+}
+
+.label {
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mainNav.collapsed .label {
+  display: none;
+}
+
+/* Tooltip */
+.tooltip {
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  margin-left: 8px;
+  z-index: 1001;
+  font-weight: 500;
+}
+
+.navButton:hover .tooltip {
+  opacity: 1;
+}
+
+/* Collapse Button */
+.collapseBtnContainer {
+  padding: 10px;
+  margin-top: auto;
+}
+
+.collapseBtn {
+  width: 100%;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: var(--text-light);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: 600;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.collapseBtn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.05);
+}
+
+/* Mobile Menu */
+.mobilMenuToggle {
+  display: none;
+  position: fixed;
+  top: 70px;
+  left: 10px;
+  z-index: 99;
+}
+
+.mobileMenuBtn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: white;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+}
+
+.mobileMenuBtn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.mobileDrawer {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  background: var(--primary);
+  z-index: 98;
+  overflow-y: auto;
+  animation: slideInLeft 0.3s ease-out;
+}
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.mobileHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.mobileHeader h3 {
+  font-size: 18px;
+  margin: 0;
+  font-weight: 700;
+}
+
+.closeBtn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 0;
+  transition: var(--transition);
+}
+
+.closeBtn:hover {
+  transform: rotate(90deg);
+}
+
+.mobileNavList {
+  list-style: none;
+  padding: 15px;
+}
+
+.mobileNavList li {
+  margin-bottom: 8px;
+}
+
+.mobileNavItem {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 15px;
+  transition: var(--transition);
+}
+
+.mobileNavItem:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateX(4px);
+}
+
+.mobileNavItem img {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+}
+
+.mobileAddEntry {
+  background: var(--accent);
+  margin-top: 20px;
+  transition: var(--transition);
+}
+
+.mobileAddEntry:hover {
+  background: #5a6fd3;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .mainNav {
+    width: 100px;
+    padding: 15px 0;
+  }
+
+  .mainNav.collapsed {
+    width: 60px;
+  }
+
+  .label {
+    display: none;
+  }
+
+  .profileContainer {
+    width: 80px;
+    height: 80px;
+    margin: 10px auto 30px;
+  }
+
+  .profileInitial {
+    font-size: 32px;
+  }
+
+  .navButton {
+    padding: 10px 8px;
+    gap: 0;
+    justify-content: center;
+  }
+
+  .navButton:hover {
+    transform: scale(1.15);
+  }
+
+  .icon {
+    width: 35px;
+    height: 35px;
+  }
+
+  .tooltip {
+    left: 110%;
+    opacity: 1;
+    pointer-events: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .mainNav {
+    display: none;
+  }
+
+  .mobilMenuToggle {
+    display: block;
+  }
+
+  .collapseBtn {
+    display: none;
+  }
+}
+
+/* Tablet Navigation Optimization */
+@media (max-width: 1024px) and (min-width: 768px) {
+  .mainNav {
+    width: 90px;
+  }
+
+  .profileContainer {
+    width: 70px;
+    height: 70px;
+    margin: 15px auto;
+  }
+
+  .profileInitial {
+    font-size: 24px;
+  }
+
+  .panelContainer {
+    margin: 15px auto 0;
+  }
+
+  .panelContents ul {
+    gap: 6px;
+  }
+
+  .navButton {
+    padding: 10px 8px;
+  }
+}
+
+.imageStyle {
+
+    margin-left: 15px;
+    padding: 11px;
+    height:65px;
+    width: auto;
+    cursor: pointer;
+
+}
+
+.imageStyle:hover {
+
+    transform: scale(1.3);    
+    opacity: 1.2;
+
+}
+
+
+
+/* img {
+    margin-left: 15px;
+    padding: 11px;
+    height:65px;
+    width: auto;
+    cursor: pointer;
+}
+
+img:hover {
+    transform: scale(1.3);    
+    opacity: 1.2;
+} */
+
+/*------------- BOTTOM LIKE FOOTER -------------*/
+
+#addEntryContainer {
+    margin-top: 430px;
+    height:50px;
+    width: auto;
+}
+
+
+/*-------- MAIN NAV ---------------*/
+
+.mainNav {
+    display: flex;
+    color: #f4f4f9;
+    justify-content: start;
+    height: 100vh;
+    width: 120px;
+    background: var(--primary-color);
+    z-index: 1;
+
+}
+
+.navWrapper {
+    z-index: 2;
+}
+
+
+ul  {
+    list-style: none;
+    text-decoration: none;
+    
+}
+
+ul li {
+    position: relative;
+    text-decoration: none;
+}
+
+ul li a {
+    color: var(--light-color);
+    text-decoration: none;
+
+}
+
+a {
+    text-decoration: none;
+    list-style: none;
+    
+
+}
+
+
+ /* -------------- PROFILE ----------------- */
+
+
+.profileContainer {
+    height: 100px;
+    width: 100px;
+    background-color: #ffffff;
+    border: 4px solid #eae7ff;
+    color: white;
+    border-radius: 100%;
+    margin-bottom: 50px;
+    margin-left: 10px;
+    margin-top: 50px;
+    z-index: 1000;
+    cursor: pointer;
+    
+}
+
+.profileWrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    object-fit: cover;
+
+}
+
+.panelContainer {
+    margin-left: 13px;
+
+}
+
+/* ------------- COLLAPSABLE BUTTON ----------------*/
+
+.collapseBtnContainer .collapseBtnWrapper img {
+    position: absolute;
+    height: 50px;
+    width: auto;
+    top: 0;
+    left: 50%;
+    transform: translate(-210px, 520px);
+    cursor: pointer;
+    
+}
+
