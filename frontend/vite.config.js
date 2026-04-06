@@ -12,15 +12,14 @@ export default defineConfig({
     proxy: {
       '/api': {
         // API target: backend service on port 3001
-        target: 'http://127.0.0.1:3001',
+        target: 'http://backend:80',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, '')
       }
     },
     cors: true,
-    // HMR configuration for hot module replacement
     middlewareMode: false,
-    // Allow connections from external clients
+    // HMR configuration for development - use localhost:5173
     hmr: {
       host: 'localhost',
       port: 5173,

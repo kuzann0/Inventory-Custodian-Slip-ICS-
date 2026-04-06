@@ -306,7 +306,7 @@
 
 .userCard.selected {
   border-color: var(--color-accent);
-  background: #f0f7ff;
+  background: var(--color-accent-alpha-05);
   box-shadow: var(--shadow-button-hover);
 }
 
@@ -393,13 +393,13 @@
 }
 
 .userListItem:hover {
-  border-color: #667eea;
-  background: #f0f7ff;
+  border-color: var(--color-accent);
+  background: var(--color-accent-alpha-05);
 }
 
 .userListItem.active {
-  background: #667eea;
-  border-color: #667eea;
+  background: var(--color-accent);
+  border-color: var(--color-accent);
   color: white;
 }
 
@@ -443,8 +443,8 @@
 }
 
 .capabilityCard:hover {
-  border-color: #667eea;
-  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.1);
+  border-color: var(--color-accent);
+  box-shadow: 0 2px 8px var(--color-accent-alpha-10);
 }
 
 .capName {
@@ -603,7 +603,7 @@
 
 /* Button */
 .btn {
-  background: #667eea;
+  background: var(--color-accent);
   color: white;
   border: none;
   padding: 10px 20px;
@@ -614,7 +614,7 @@
 }
 
 .btn:hover {
-  background: #764ba2;
+  background: var(--color-accent-dark);
 }
 
 /* Access Denied */

@@ -18,7 +18,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 try {
-    $conn = new mysqli('db', 'root', 'rootpassword', 'my_app_db');
+    $conn = new mysqli(
+        getenv('MYSQL_HOST') ?: 'db',
+        getenv('MYSQL_USER') ?: 'root',
+        getenv('MYSQL_PASSWORD') ?: 'rootpassword',
+        getenv('MYSQL_DATABASE') ?: 'my_app_db'
+    );
     
     if ($conn->connect_error) {
         throw new Exception('Database connection failed');

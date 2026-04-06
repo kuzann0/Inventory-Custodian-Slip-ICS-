@@ -4,15 +4,22 @@
  * Simple, fast, reliable
  */
 
-// Start session BEFORE any headers sent
+// Configure session cookies BEFORE starting session
+session_set_cookie_params([
+    'lifetime' => 3600,
+    'path' => '/',
+    'domain' => '',
+    'secure' => false,  // Allow HTTP for development
+    'httponly' => true, // No JavaScript access
+    'samesite' => 'Lax'
+]);
+
+// Start session AFTER cookie params set
 session_start();
 
-// Enable CORS - Allow from any origin with credentials
-$origin = $_SERVER['HTTP_ORIGIN'] ?? '*';
-header('Access-Control-Allow-Origin: ' . $origin);
-header("Access-Control-Allow-Methods: POST, OPTIONS, GET");
-header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With");
-header("Access-Control-Allow-Credentials: true");
+// Require CORS configuration
+require_once 'config/cors.php';
+
 header("Content-Type: application/json; charset=UTF-8");
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {

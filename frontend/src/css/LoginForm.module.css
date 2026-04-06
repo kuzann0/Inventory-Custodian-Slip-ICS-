@@ -46,7 +46,7 @@ input:focus {
     outline: none;
     border-color: var(--color-primary);
     background-color: #fff;
-    box-shadow: 0 0 8px rgba(102, 126, 234, 0.3);
+    box-shadow: 0 0 8px rgba(18, 37, 125, 0.3);
 }
 
 button {

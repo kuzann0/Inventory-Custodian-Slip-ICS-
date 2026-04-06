@@ -61,13 +61,13 @@
   --color-primary-alpha-10: hsla(229, 75%, 28%, 0.1);
   --color-primary-alpha-20: hsla(229, 75%, 28%, 0.2);
 
-  /* Accent Colors */
-  --color-accent: #667eea;                    /* Purple Blue */
-  --color-accent-light: #8b9ef5;              /* Lighter accent */
-  --color-accent-dark: #4c63d2;               /* Darker accent */
-  --color-accent-alpha-05: rgba(102, 126, 234, 0.05);
-  --color-accent-alpha-10: rgba(102, 126, 234, 0.1);
-  --color-accent-alpha-20: rgba(102, 126, 234, 0.2);
+  /* Accent Colors - Using Primary Navy */
+  --color-accent: hsl(229, 75%, 28%);         /* Deep Blue (Primary Navy) */
+  --color-accent-light: hsl(229, 75%, 38%);   /* Lighter accent */
+  --color-accent-dark: hsl(229, 75%, 18%);    /* Darker accent */
+  --color-accent-alpha-05: hsla(229, 75%, 28%, 0.05);
+  --color-accent-alpha-10: hsla(229, 75%, 28%, 0.1);
+  --color-accent-alpha-20: hsla(229, 75%, 28%, 0.2);
 
   /* Status Colors - Semantic Meaning */
   --color-success: #10b981;                   /* Green */
@@ -123,9 +123,9 @@
   --color-light: #f4f4f9;
 
   /* Gradient Definitions */
-  --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  --gradient-primary-subtle: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(74, 63, 154, 0.05) 100%);
-  --gradient-primary-hover: linear-gradient(135deg, #7b8eef 0%, #8b5ab8 100%);
+  --gradient-primary: linear-gradient(135deg, hsl(229, 75%, 28%) 0%, hsl(229, 75%, 18%) 100%);
+  --gradient-primary-subtle: linear-gradient(135deg, hsla(229, 75%, 28%, 0.05) 0%, hsla(229, 75%, 18%, 0.05) 100%);
+  --gradient-primary-hover: linear-gradient(135deg, hsl(229, 75%, 38%) 0%, hsl(229, 75%, 28%) 100%);
 
   /* ─────────────────────────────────────────
      SPACING SYSTEM (8px Base)
@@ -195,15 +195,15 @@
 
   /* Component Shadows */
   --shadow-navbar: 4px 0 12px rgba(0, 0, 0, 0.1);
-  --shadow-form-hover: 0 4px 12px rgba(102, 126, 234, 0.1);
-  --shadow-button-hover: 0 8px 16px rgba(102, 126, 234, 0.3);
+  --shadow-form-hover: 0 4px 12px rgba(18, 37, 125, 0.1);
+  --shadow-button-hover: 0 8px 16px rgba(18, 37, 125, 0.3);
   --shadow-card-hover: 0 12px 24px rgba(0, 0, 0, 0.12);
   --shadow-modal: 0 20px 60px rgba(0, 0, 0, 0.3);
   --shadow-profile: 0 4px 12px rgba(0, 0, 0, 0.3);
 
   /* Inset Shadows (for active/pressed states) */
   --shadow-inset: inset 0 2px 4px rgba(0, 0, 0, 0.1);
-  --shadow-inset-accent: inset 0 0 0 3px rgba(102, 126, 234, 0.3);
+  --shadow-inset-accent: inset 0 0 0 3px rgba(18, 37, 125, 0.3);
 
   /* ─────────────────────────────────────────
      TRANSITIONS & ANIMATIONS
@@ -472,7 +472,7 @@ input:hover:not(:focus),
 textarea:hover:not(:focus),
 select:hover:not(:focus) {
   border-color: var(--color-accent-light);
-  background-color: rgba(102, 126, 234, 0.02);
+  background-color: var(--color-accent-alpha-05);
 }
 
 input:disabled,
@@ -507,7 +507,7 @@ textarea {
 
 /* Select */
 select {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23667eea' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2312257d' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right var(--spacing-lg) center;
   padding-right: calc(var(--spacing-lg) * 3);

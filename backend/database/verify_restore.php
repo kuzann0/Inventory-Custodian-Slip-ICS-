@@ -1,5 +1,10 @@
 <?php
-$conn = new mysqli('db', 'root', 'rootpassword', 'my_app_db');
+$conn = new mysqli(
+    getenv('MYSQL_HOST') ?: 'db',
+    getenv('MYSQL_USER') ?: 'root',
+    getenv('MYSQL_PASSWORD') ?: 'rootpassword',
+    getenv('MYSQL_DATABASE') ?: 'my_app_db'
+);
 
 $result = $conn->query('SELECT COUNT(*) as cnt FROM capabilities');
 $row = $result->fetch_assoc();
