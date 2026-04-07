@@ -1,0 +1,46 @@
+# Frontend .dockerignore - Exclude files from Docker build context
+# This reduces build time and image size by not copying unnecessary files
+
+# Version control
+.git
+.gitignore
+.github
+
+# IDE and editor files
+.vscode
+.idea
+*.swp
+*.swo
+*~
+.DS_Store
+.env.local
+.env.*.local
+
+# Dependencies (will be installed in Docker)
+node_modules
+npm-debug.log
+yarn-error.log
+pnpm-debug.log
+
+# Build output (will be generated in container)
+dist
+build
+
+# Testing
+coverage
+__tests__
+*.test.js
+*.spec.js
+
+# Documentation
+README.md
+docs
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+.cache
