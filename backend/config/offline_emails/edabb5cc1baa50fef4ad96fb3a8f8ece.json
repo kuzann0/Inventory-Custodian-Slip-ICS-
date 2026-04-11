@@ -1,0 +1,10 @@
+{
+    "timestamp": 1774669469,
+    "to": "test@example.com",
+    "subject": "Test Email",
+    "body": "<h1>Test</h1><p>This is a test email</p>",
+    "altText": "",
+    "from": "noreply@ics-system.local",
+    "fromName": "ICS System",
+    "attachments": []
+}
