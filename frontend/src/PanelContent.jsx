@@ -139,7 +139,7 @@ function PanelContent({ activePanel, setActivePanel, navbarCollapsed = false }) 
                     <div className={styles.panelBody}>
                         <div className={styles.contentSection}>
                             <div style={{ marginBottom: '15px', padding: '10px', backgroundColor: '#e8f4f8', borderRadius: '4px', fontSize: '12px', color: '#0066cc' }}>
-                                {sessionStorage.getItem('role') === 'Employee' 
+                                {(sessionStorage.getItem('role') === 'Employee' || sessionStorage.getItem('role_id') === '3') 
                                     ? "📌 Viewing your entries only" 
                                     : "📋 Viewing all entries"}
                             </div>
@@ -201,7 +201,7 @@ function PanelContent({ activePanel, setActivePanel, navbarCollapsed = false }) 
                     <div className={styles.panelBody}>
                         <div className={styles.contentSection}>
                             <div style={{ marginBottom: '15px', padding: '10px', backgroundColor: '#e8f4f8', borderRadius: '4px', fontSize: '12px', color: '#0066cc' }}>
-                                {sessionStorage.getItem('role') === 'Employee' 
+                                {(sessionStorage.getItem('role') === 'Employee' || sessionStorage.getItem('role_id') === '3') 
                                     ? "📌 Showing your actions only" 
                                     : "📋 Showing all actions"}
                             </div>
