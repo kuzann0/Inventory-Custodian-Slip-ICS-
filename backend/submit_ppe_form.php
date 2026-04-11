@@ -1,4 +1,8 @@
 <?php
+// Suppress all warnings and notices
+error_reporting(0);
+ini_set('display_errors', '0');
+
 // CORS Configuration
 require_once 'config/cors.php';
 
@@ -89,9 +93,12 @@ try {
     // Create a property number from PR number and category
     $property_number = $pr_no . '-' . strtoupper(substr($data['category'], 0, 3)) . '-' . date('Ymd');
     
-    // Bind parameters (14 parameters total)
+    // Handle optional date fields
+    $acquisition_date = !empty($data['acquisition_date']) ? $data['acquisition_date'] : date('Y-m-d');
+    
+    // Bind parameters (12 parameters total)
     $stmt->bind_param(
-        'issssssissi',
+        'isssssssdsii',
         $pr_id,
         $pr_no,
         $property_number,
@@ -99,7 +106,7 @@ try {
         $data['model_number'],
         $data['serial_number'],
         $data['unit_of_measure'],
-        $data['acquisition_date'],
+        $acquisition_date,
         $data['supplier_name'],
         $data['total_cost'],
         $data['location_building'],

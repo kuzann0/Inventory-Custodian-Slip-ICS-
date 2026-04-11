@@ -738,7 +738,7 @@ function SuperAdminPage() {
                                     }
                                     disabled={loading}
                                   />
-                                  <span>{isGranted ? 'Granted' : 'Not Granted'}</span>
+                                  <span>{isGranted ? '✓ Granted' : 'Not Granted'}</span>
                                 </label>
                               </div>
                             );

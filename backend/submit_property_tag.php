@@ -1,10 +1,23 @@
 <?php
+// Suppress all warnings and notices
+error_reporting(0);
+ini_set('display_errors', '0');
+
 /**
  * Submit property inventory tag - Link to purchase_requests
  */
 
+// CORS Configuration
+require_once 'config/cors.php';
+
 header('Content-Type: application/json; charset=UTF-8');
 session_start();
+
+// Handle preflight requests
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit;
+}
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
@@ -33,7 +46,7 @@ try {
     $description = $data['description'] ?? '';
     $serial_number = $data['serial_number'] ?? '';
     $unit_of_measure = $data['unit_of_measure'] ?? '';
-    $acquisition_date = $data['acquisition_date'] ?? date('Y-m-d');
+    $acquisition_date = !empty($data['acquisition_date']) ? $data['acquisition_date'] : date('Y-m-d');
     $supplier = $data['supplier'] ?? '';
     $estimated_cost = $data['estimated_cost'] ?? 0;
     $location = $data['location'] ?? '';
@@ -56,7 +69,7 @@ try {
     ");
 
     $stmt->bind_param(
-        'isssssssdssi',
+        'issssssssdssi',
         $pr_id,
         $pr_no,
         $property_number,

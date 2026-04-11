@@ -60,25 +60,18 @@ try {
     $pr_id = isset($data['pr_id']) ? (int)$data['pr_id'] : null;
     $pr_no = isset($data['pr_no']) ? $data['pr_no'] : null;
 
-    // Create inventory entry or record in a logs/completion table
-    // For now, we'll insert into audit_logs to record the ICS form completion
+    // Create inventory entry or record in audit_logs to record the ICS form completion
     $ics_data = json_encode($data);
     
     $stmt = $conn->prepare("
         INSERT INTO audit_logs (
-            entity_type,
-            entity_id,
+            admin_id,
             action,
-            description,
-            details,
-            performed_by,
+            action_details,
             created_at
         ) VALUES (
-            'purchase_request',
             ?,
-            'ics_form_submitted',
-            ?,
-            ?,
+            'ics_form_completed',
             ?,
             NOW()
         )
@@ -87,16 +80,12 @@ try {
     if (!$stmt) {
         throw new Exception('Prepare failed: ' . $conn->error, 500);
     }
-
-    $action_desc = "ICS Form submitted for PR: " . ($pr_no ? $pr_no : 'Unknown');
     
     // Bind parameters
     $stmt->bind_param(
-        'issi',
-        $pr_id,
-        $action_desc,
-        $ics_data,
-        $user_id
+        'is',
+        $user_id,
+        $ics_data
     );
 
     if (!$stmt->execute()) {
