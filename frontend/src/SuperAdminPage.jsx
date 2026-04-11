@@ -714,33 +714,35 @@ function SuperAdminPage() {
               <div className={styles.capabilitiesGrid}>
                 {selectedUserForCapabilities ? (
                   <>
-                    <h3>{selectedUserForCapabilities.username}'s Capabilities</h3>
+                    <h3>{selectedUserForCapabilities.username}'s Capabilities ({getRoleLabel(selectedUserForCapabilities.role_id)})</h3>
                     {allCapabilities.length === 0 ? (
                       <p className={styles.emptyState}>No capabilities available</p>
                     ) : (
                       <div className={styles.capabilityCards}>
-                        {allCapabilities.map((cap) => {
-                          const isGranted = userCapabilities.some(
-                            (uc) => uc.id === cap.id
-                          );
-                          return (
-                            <div key={cap.id} className={styles.capabilityCard}>
-                              <div className={styles.capName}>{cap.capability_key}</div>
-                              <p className={styles.capDesc}>{cap.description}</p>
-                              <label className={styles.capCheckbox}>
-                                <input
-                                  type="checkbox"
-                                  checked={isGranted}
-                                  onChange={(e) =>
-                                    handleToggleCapability(cap.id, e.target.checked)
-                                  }
-                                  disabled={loading}
-                                />
-                                <span>{isGranted ? 'Granted' : 'Not Granted'}</span>
-                              </label>
-                            </div>
-                          );
-                        })}
+                        {allCapabilities
+                          .filter((cap) => cap.required_role_id >= selectedUserForCapabilities.role_id)
+                          .map((cap) => {
+                            const isGranted = userCapabilities.some(
+                              (uc) => uc.id === cap.id
+                            );
+                            return (
+                              <div key={cap.id} className={styles.capabilityCard}>
+                                <div className={styles.capName}>{cap.capability_key}</div>
+                                <p className={styles.capDesc}>{cap.description}</p>
+                                <label className={styles.capCheckbox}>
+                                  <input
+                                    type="checkbox"
+                                    checked={isGranted}
+                                    onChange={(e) =>
+                                      handleToggleCapability(cap.id, e.target.checked)
+                                    }
+                                    disabled={loading}
+                                  />
+                                  <span>{isGranted ? 'Granted' : 'Not Granted'}</span>
+                                </label>
+                              </div>
+                            );
+                          })}
                       </div>
                     )}
                   </>
