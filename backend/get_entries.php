@@ -37,7 +37,8 @@ if ($conn->connect_error) {
 $sql = "SELECT LPAD(order_id, 6, '0') AS order_id,
   Quantity, Unit, Amount, UnitCost, TotalCost,
   Description, Item, SerialNo, DateAcquired,
-  Location, InventoryItemNo, EstimatedUsefulLife
+  Location, InventoryItemNo, EstimatedUsefulLife,
+  'pending' AS status
   FROM entries";
 
 $result = $conn->query($sql);
@@ -48,11 +49,13 @@ if ($result) {
     $rows[] = $row;
   }
 } else {
-  echo json_encode(["error" => $conn->error]);
+  http_response_code(500);
+  echo json_encode(["status" => "error", "message" => $conn->error]);
   $conn->close();
   exit;
 }
 
-echo json_encode($rows);
+http_response_code(200);
+echo json_encode(["status" => "success", "data" => $rows]);
 $conn->close();
 ?>

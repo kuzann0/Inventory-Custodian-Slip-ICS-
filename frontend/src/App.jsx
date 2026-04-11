@@ -299,6 +299,21 @@ function App() {
             }
           />
 
+          {/* View All Entries */}
+          <Route
+            path="/entries"
+            element={
+              <ProtectedRoute>
+                <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: '#f5f7fa' }}>
+                  <Navbar collapsed={navbarCollapsed} setCollapsed={setNavbarCollapsed} />
+                  <DashboardLayout navbarCollapsed={navbarCollapsed}>
+                    <ViewEntries />
+                  </DashboardLayout>
+                </div>
+              </ProtectedRoute>
+            }
+          />
+
           {/* Catch all - redirect to login */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

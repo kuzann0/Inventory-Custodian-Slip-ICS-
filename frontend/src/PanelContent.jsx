@@ -43,8 +43,10 @@ function PanelContent({ activePanel, setActivePanel, navbarCollapsed = false }) 
                 });
                 const data = await response.json();
                 
-                if (data.status === "success" && Array.isArray(data.data)) {
-                    setAuditLogs(data.data.slice(0, 10));
+                // Handle both response formats: data.logs or data.data
+                const logsArray = data.logs || data.data || [];
+                if (data.status === "success" && Array.isArray(logsArray)) {
+                    setAuditLogs(logsArray.slice(0, 10));
                 }
             } catch (err) {
                 console.error("Error fetching audit logs:", err);
@@ -139,8 +141,25 @@ function PanelContent({ activePanel, setActivePanel, navbarCollapsed = false }) 
                             <h3 className={styles.sectionTitle}>Operations</h3>
                             <div className={styles.actionList}>
                                 <button className={styles.actionButton} onClick={() => navigate('/new-purchase-request')}>Create New Entry</button>
-                                <button className={styles.actionButton}>View All Entries</button>
-                                <button className={styles.actionButton}>Export Data</button>
+                                <button className={styles.actionButton} onClick={() => navigate('/entries')}>View All Entries</button>
+                                <button className={styles.actionButton} onClick={() => {
+                                    if (recentEntries.length === 0) {
+                                        alert('No entries to export');
+                                        return;
+                                    }
+                                    const headers = Object.keys(recentEntries[0]).join(',');
+                                    const rows = recentEntries.map(entry => 
+                                        Object.values(entry).map(v => v === null ? '' : `"${v}"`).join(',')
+                                    ).join('\n');
+                                    const csv = [headers, rows].join('\n');
+                                    const blob = new Blob([csv], { type: 'text/csv' });
+                                    const url = window.URL.createObjectURL(blob);
+                                    const a = document.createElement('a');
+                                    a.href = url;
+                                    a.download = `entries_${new Date().toISOString().split('T')[0]}.csv`;
+                                    a.click();
+                                    window.URL.revokeObjectURL(url);
+                                }}>Export Data</button>
                             </div>
                         </div>
                         <div className={styles.contentSection}>
@@ -188,7 +207,7 @@ function PanelContent({ activePanel, setActivePanel, navbarCollapsed = false }) 
                                         <div key={idx} className={styles.logItem}>
                                             <span className={styles.logTime}>{log.timestamp ? new Date(log.timestamp).toLocaleTimeString() : '—'}</span>
                                             <span className={styles.logAction}>{log.action || '—'}</span>
-                                            <span className={styles.logUser}>{log.user || '—'}</span>
+                                            <span className={styles.logUser}>{log.actor_username || log.user || '—'}</span>
                                         </div>
                                     ))
                                 ) : (
