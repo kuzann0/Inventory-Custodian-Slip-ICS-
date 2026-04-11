@@ -22,6 +22,9 @@ if (!isset($_SESSION['user_id'])) {
   exit;
 }
 
+$userId = $_SESSION['user_id'];
+$roleId = isset($_SESSION['role_id']) ? intval($_SESSION['role_id']) : null;
+
 $servername = "db";
 $username   = "root";
 $password   = "rootpassword";
@@ -34,12 +37,20 @@ if ($conn->connect_error) {
   exit;
 }
 
+// Build query based on user role
+// Role 1 = SuperAdmin, Role 2 = Admin, Role 3 = Employee
+// Employees see only their own entries, Admins see all
 $sql = "SELECT LPAD(order_id, 6, '0') AS order_id,
   Quantity, Unit, Amount, UnitCost, TotalCost,
   Description, Item, SerialNo, DateAcquired,
   Location, InventoryItemNo, EstimatedUsefulLife,
   'pending' AS status
   FROM entries";
+
+// If user is employee (role_id = 3), filter by created_by
+if ($roleId === 3) {
+  $sql .= " WHERE created_by = " . intval($userId);
+}
 
 $result = $conn->query($sql);
 

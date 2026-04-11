@@ -16,8 +16,14 @@ function ViewEntries() {
     })
       .then((res) => res.json())
       .then((data) => {
-        const entriesArray = Array.isArray(data) ? data : [];
-        setEntries(entriesArray);
+        // Handle both response formats: new structured response and legacy array response
+        if (data.status === "success" && Array.isArray(data.data)) {
+          setEntries(data.data);
+        } else if (Array.isArray(data)) {
+          setEntries(data);
+        } else {
+          setEntries([]);
+        }
       })
       .catch((err) => console.error("Error fetching entries:", err));
   };

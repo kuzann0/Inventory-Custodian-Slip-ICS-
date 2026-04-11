@@ -138,6 +138,11 @@ function PanelContent({ activePanel, setActivePanel, navbarCollapsed = false }) 
                     <h2 className={styles.panelTitle}>Data Management</h2>
                     <div className={styles.panelBody}>
                         <div className={styles.contentSection}>
+                            <div style={{ marginBottom: '15px', padding: '10px', backgroundColor: '#e8f4f8', borderRadius: '4px', fontSize: '12px', color: '#0066cc' }}>
+                                {sessionStorage.getItem('role') === 'Employee' 
+                                    ? "📌 Viewing your entries only" 
+                                    : "📋 Viewing all entries"}
+                            </div>
                             <h3 className={styles.sectionTitle}>Operations</h3>
                             <div className={styles.actionList}>
                                 <button className={styles.actionButton} onClick={() => navigate('/new-purchase-request')}>Create New Entry</button>
@@ -195,6 +200,11 @@ function PanelContent({ activePanel, setActivePanel, navbarCollapsed = false }) 
                     <h2 className={styles.panelTitle}>Audit Logs</h2>
                     <div className={styles.panelBody}>
                         <div className={styles.contentSection}>
+                            <div style={{ marginBottom: '15px', padding: '10px', backgroundColor: '#e8f4f8', borderRadius: '4px', fontSize: '12px', color: '#0066cc' }}>
+                                {sessionStorage.getItem('role') === 'Employee' 
+                                    ? "📌 Showing your actions only" 
+                                    : "📋 Showing all actions"}
+                            </div>
                             <h3 className={styles.sectionTitle}>Transaction Tracking</h3>
                             <div className={styles.logList}>
                                 <div className={styles.logItem}>

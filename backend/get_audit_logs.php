@@ -52,27 +52,41 @@ try {
         exit(json_encode(['status' => 'error', 'message' => 'Database connection failed']));
     }
     
-    // Validate actor is SuperAdmin
-    $actorStmt = $conn->prepare("SELECT role_id FROM users WHERE id = ?");
-    $actorStmt->bind_param('i', $actorId);
-    $actorStmt->execute();
-    $actorResult = $actorStmt->get_result();
+    // Get current user's role from session
+    $currentUserId = intval($_SESSION['user_id'] ?? 0);
+    $currentRoleId = intval($_SESSION['role_id'] ?? 0);
     
-    if ($actorResult->num_rows === 0) {
-        http_response_code(403);
-        exit(json_encode(['status' => 'error', 'message' => 'Actor not found']));
+    // Validate current user is authenticated and has permission
+    if ($currentUserId === 0) {
+        http_response_code(401);
+        exit(json_encode(['status' => 'error', 'message' => 'User not authenticated']));
     }
     
-    $actor = $actorResult->fetch_assoc();
-    $actorStmt->close();
+    // Get current user's role info
+    $userStmt = $conn->prepare("SELECT role_id FROM users WHERE id = ?");
+    $userStmt->bind_param('i', $currentUserId);
+    $userStmt->execute();
+    $userResult = $userStmt->get_result();
     
-    if ($actor['role_id'] !== 1) {
+    if ($userResult->num_rows === 0) {
         http_response_code(403);
-        exit(json_encode(['status' => 'error', 'message' => 'Only SuperAdmin can view audit logs']));
+        exit(json_encode(['status' => 'error', 'message' => 'User not found']));
     }
     
-    // Get total count first
+    $userRow = $userResult->fetch_assoc();
+    $currentRoleId = intval($userRow['role_id']);
+    $userStmt->close();
+    
+    // Admins (role 1, 2) can view all logs; Employees (role 3) can only view logs about their own actions
+    $isAdmin = in_array($currentRoleId, [1, 2]);
+    
+    // Build count query based on role
     $countQuery = "SELECT COUNT(*) as total FROM capability_audit_log";
+    if (!$isAdmin) {
+        // Employees can only see logs where they are the actor (their own actions)
+        $countQuery .= " WHERE actor_id = " . intval($currentUserId);
+    }
+    
     $countResult = $conn->query($countQuery);
     $countRow = $countResult->fetch_assoc();
     $totalCount = intval($countRow['total']);
@@ -95,8 +109,15 @@ try {
         FROM capability_audit_log cal
         LEFT JOIN users actor ON cal.actor_id = actor.id
         LEFT JOIN users target ON cal.target_id = target.id
-        LEFT JOIN capabilities cap ON cal.capability_id = cap.id
-        ORDER BY cal.created_at DESC
+        LEFT JOIN capabilities cap ON cal.capability_id = cap.id";
+    
+    // Apply role-based filtering
+    if (!$isAdmin) {
+        // Employees can only see logs where they are the actor (their own actions)
+        $query .= " WHERE cal.actor_id = " . intval($currentUserId);
+    }
+    
+    $query .= " ORDER BY cal.created_at DESC
         LIMIT ? OFFSET ?
     ";
     
