@@ -134,6 +134,91 @@ try {
     $pr_id = $stmt->insert_id;
     $stmt->close();
 
+    // Create corresponding entry in entries table (single source of truth)
+    $entry_sql = "
+        INSERT INTO entries (
+            Quantity,
+            Unit,
+            UnitCost,
+            TotalCost,
+            Description,
+            Item,
+            Location,
+            SerialNo,
+            InventoryItemNo,
+            EstimatedUsefulLife,
+            DateAcquired
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())
+    ";
+
+    $entry_stmt = $conn->prepare($entry_sql);
+    if (!$entry_stmt) {
+        throw new Exception('Failed to prepare entry insert: ' . $conn->error);
+    }
+
+    $serial_no = $data['serial_no'] ?? null;
+    $inventory_item_no = $data['inventory_item_no'] ?? null;
+    $estimated_useful_life = $data['estimated_useful_life'] ?? null;
+
+    $entry_stmt->bind_param(
+        'isddssssss',
+        $data['quantity'],
+        $data['unit'],
+        $data['unit_cost'],
+        $total_amount,
+        $description,
+        $data['item_name'],
+        $data['office'],
+        $serial_no,
+        $inventory_item_no,
+        $estimated_useful_life
+    );
+
+    if (!$entry_stmt->execute()) {
+        throw new Exception('Failed to create entry: ' . $entry_stmt->error);
+    }
+
+    $entry_id = $entry_stmt->insert_id;
+    $entry_stmt->close();
+
+    // Create entry_workflow_status record to link entry to PR
+    $workflow_status_sql = "
+        INSERT INTO entry_workflow_status (
+            entry_id,
+            pr_id,
+            pr_no,
+            current_step,
+            step_1_completed,
+            step_1_data
+        ) VALUES (?, ?, ?, 1, 1, ?)
+    ";
+
+    $workflow_stmt = $conn->prepare($workflow_status_sql);
+    if (!$workflow_stmt) {
+        throw new Exception('Failed to prepare workflow status insert: ' . $conn->error);
+    }
+
+    $step_1_data = json_encode([
+        'item_name' => $data['item_name'],
+        'quantity' => $data['quantity'],
+        'unit' => $data['unit'],
+        'unit_cost' => $data['unit_cost']
+    ]);
+
+    $workflow_stmt->bind_param(
+        'iiss',
+        $entry_id,
+        $pr_id,
+        $data['pr_no'],
+        $step_1_data
+    );
+
+    if (!$workflow_stmt->execute()) {
+        throw new Exception('Failed to create workflow status: ' . $workflow_stmt->error);
+    }
+
+    $workflow_stmt->close();
+
     // Log to workflow_history
     $history_sql = "
         INSERT INTO workflow_history (

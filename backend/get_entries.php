@@ -44,8 +44,8 @@ if (!$roleId && isset($_SERVER['HTTP_X_ROLE_ID'])) {
   $roleId = intval($_SERVER['HTTP_X_ROLE_ID']);
 }
 if (!$roleId) {
-  // Default to employee role for testing
-  $roleId = 3;
+  // Default to admin role for testing (shows all entries)
+  $roleId = 2;
 }
 
 $servername = "db";
@@ -63,32 +63,38 @@ if ($conn->connect_error) {
 // Build query based on user role
 // Role 1 = SuperAdmin, Role 2 = Admin, Role 3 = Employee
 // Employees see only their own entries, Admins see all
-// Query purchase_requests table
+// Query entries table with all fields including SerialNo, InventoryItemNo, EstimatedUsefulLife
 $sql = "SELECT 
-  id AS order_id,
-  pr_no,
-  item_name AS Item,
-  description AS Description,
-  quantity AS Quantity,
-  unit AS Unit,
-  unit_cost AS UnitCost,
-  total_amount AS TotalCost,
-  office AS Location,
-  status,
-  created_at AS DateAcquired,
-  created_by,
-  form_type
-  FROM purchase_requests";
+  e.order_id,
+  e.Item,
+  e.Description,
+  e.Quantity,
+  e.Unit,
+  e.UnitCost,
+  e.TotalCost,
+  e.Location,
+  e.SerialNo,
+  e.InventoryItemNo,
+  e.EstimatedUsefulLife,
+  e.DateAcquired,
+  pr.pr_no,
+  pr.status,
+  pr.form_type,
+  pr.created_by,
+  pr.created_at
+  FROM entries e
+  LEFT JOIN entry_workflow_status ews ON e.order_id = ews.entry_id
+  LEFT JOIN purchase_requests pr ON ews.pr_id = pr.id";
 
 // If user is employee (role_id = 3), filter by created_by
 if ($roleId === 3) {
-  $sql .= " WHERE created_by = " . intval($userId);
+  $sql .= " WHERE pr.created_by = " . intval($userId);
 } else {
   // Admins and SuperAdmins see all
   $sql .= " WHERE 1=1";
 }
 
-$sql .= " ORDER BY created_at DESC";
+$sql .= " ORDER BY e.order_id DESC";
 
 $result = $conn->query($sql);
 
