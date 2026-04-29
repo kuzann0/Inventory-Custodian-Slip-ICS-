@@ -64,18 +64,37 @@ try {
     $inspection_notes = $data['inspection_notes'] ?? '';
     $condition_report = $data['condition_report'] ?? '';
 
-    if (!$assignment_id || !$pr_id || !$inspection_notes) {
-        throw new Exception('Missing required fields');
+    if (!$pr_id || !$inspection_notes) {
+        throw new Exception('Missing required fields: pr_id and inspection_notes are required');
     }
 
-    // Update inspection_assignments table
-    $stmt = $conn->prepare("UPDATE inspection_assignments SET status = 'completed', inspection_notes = ?, condition_report = ?, completed_date = NOW() WHERE id = ?");
-    $stmt->bind_param('ssi', $inspection_notes, $condition_report, $assignment_id);
-
-    if (!$stmt->execute()) {
-        throw new Exception('Failed to update assignment: ' . $stmt->error);
-    }
+    // Check if inspection_assignments record exists for this PR
+    $stmt = $conn->prepare("SELECT id FROM inspection_assignments WHERE pr_id = ?");
+    $stmt->bind_param('i', $pr_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $assignment_exists = $result->num_rows > 0;
     $stmt->close();
+
+    if ($assignment_exists) {
+        // Update existing inspection_assignments record
+        $stmt = $conn->prepare("UPDATE inspection_assignments SET status = 'completed', inspection_notes = ?, condition_report = ?, completed_date = NOW() WHERE pr_id = ?");
+        $stmt->bind_param('ssi', $inspection_notes, $condition_report, $pr_id);
+
+        if (!$stmt->execute()) {
+            throw new Exception('Failed to update assignment: ' . $stmt->error);
+        }
+        $stmt->close();
+    } else {
+        // Create new inspection_assignments record
+        $stmt = $conn->prepare("INSERT INTO inspection_assignments (pr_id, assigned_to, status, inspection_notes, condition_report, completed_date) VALUES (?, ?, 'completed', ?, ?, NOW())");
+        $stmt->bind_param('iiss', $pr_id, $user_id, $inspection_notes, $condition_report);
+
+        if (!$stmt->execute()) {
+            throw new Exception('Failed to create assignment: ' . $stmt->error);
+        }
+        $stmt->close();
+    }
 
     // Update purchase_requests table
     $stmt = $conn->prepare("UPDATE purchase_requests SET status = 'inspected', inspection_notes = ?, inspection_date = NOW(), inspected_by = ? WHERE id = ?");

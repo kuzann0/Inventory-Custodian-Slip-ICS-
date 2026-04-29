@@ -52,7 +52,7 @@ function NewPurchaseRequest() {
                 <h2 className={styles.modalTitle}>Create Purchase Request</h2>
             
             <p className={styles.modalSubtitle}>
-                Enter a name for your new Purchase Request
+               Purchase Request Number
             </p>
 
             <div className={styles.inputGroup}>

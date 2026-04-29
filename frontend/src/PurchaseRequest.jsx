@@ -7,11 +7,11 @@ function NewEntryPR() {
     const navigate = useNavigate();
     const AMOUNT_THRESHOLD = 50000; // Base 50K threshold
 
-    // --------------- State Management ---------------
+    // --------------- State    Management ---------------
     const [currentStep, setCurrentStep] = useState('create'); // create, approval, delivery_note, inspection, form_selection
     const [quantity, setQuantity] = useState(0);
-    const [unitCost, setUnitCost] = useState(0);
-    const [prNo, setPrNo] = useState('');
+    const [unitCost, setUnitCost] = useState(0); // uses the same value in ICS and PPE Forms (data bind)
+    const [prNo, setPrNo] = useState(''); 
     const [office, setOffice] = useState('');
     const [divisionSection, setDivisionSection] = useState('');
     const [dateRequested, setDateRequested] = useState('');
@@ -22,11 +22,27 @@ function NewEntryPR() {
     
     // Approval & Workflow states
     const [approvalDecision, setApprovalDecision] = useState(null); // 'approved' or 'disapproved'
-    const [deliveryNotes, setDeliveryNotes] = useState('');
     const [inspectionNotes, setInspectionNotes] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitMessage, setSubmitMessage] = useState('');
     const [messageType, setMessageType] = useState('');
+
+    // Delivery Note states
+    const [deliveryNotes, setDeliveryNotes] = useState('');
+
+    // ------------ 1ST ROW ------------ 
+    const [supplier, setSupplier] = useState('');
+    const [siNo, setSiNo] = useState('');
+    const [poDate, setPoDate] = useState('');
+    const [drNo, setDrNo] = useState('');
+
+    // ------------ 2ND ROW ------------
+    const [particular, setParticular] = useState('');
+    const [amount, setAmount] = useState('');
+
+    // ------------ 3RD ROW ------------ 
+    const [preparedBy, setPreparedBy] = useState('');
+    const [notedBy, setNotedBy] = useState('');
 
     // PR ID for database persistence
     const [prId, setPrId] = useState(null);
@@ -42,7 +58,16 @@ function NewEntryPR() {
     const [iacInvoiceNo, setIacInvoiceNo] = useState('');
     const [iacInvoiceDate, setIacInvoiceDate] = useState('');
 
+    // IAC (Inspection Acceptance Certificate) - Table Row Two
+    const [iacParticular, setIacParticular] = useState('');
+    const [iacUnitRow2, setIacUnitRow2] = useState('');
+    const [iacQuantityRow2, setIacQuantityRow2] = useState(0);
+    const [iacUnitCostRow2, setIacUnitCostRow2] = useState(0);
+    const iacAmountRow2 = iacQuantityRow2 * iacUnitCostRow2;
+    const iacGrandTotal = product + iacAmountRow2;
+
     // Initialize PR Name from modal (if coming from NewPurchaseRequest)
+    // Auto-populate IAC office from step 1
     useEffect(() => {
         const newPrName = sessionStorage.getItem('new_pr_name');
         if (newPrName) {
@@ -50,6 +75,13 @@ function NewEntryPR() {
             sessionStorage.removeItem('new_pr_name'); // Clear after use
         }
     }, []);
+
+    // Dynamic binding: Auto-populate IAC office and delivery fields from step 1
+    useEffect(() => {
+        if (currentStep === 'inspection' && office && !iacRequisitioningOffice) {
+            setIacRequisitioningOffice(office);
+        }
+    }, [currentStep, office, iacRequisitioningOffice]);
 
     // Step indicators
     const stepLabels = {
@@ -187,19 +219,19 @@ function NewEntryPR() {
         e.preventDefault();
         setSubmitMessage('');
 
-        if (!deliveryNotes.trim()) {
-            setSubmitMessage('Please add delivery notes');
-            setMessageType('error');
-            return;
-        }
+        // if (!deliveryNotes.trim()) {
+        //     setSubmitMessage('Please add delivery notes');
+        //     setMessageType('error');
+        //     return;
+        // }
 
         setIsSubmitting(true);
 
         try {
             const payload = {
                 pr_id: prId,
-                delivery_notes: deliveryNotes,
-                actual_delivery_date: null,
+                delivery_notes: deliveryNotes || "No delivery notes provided",
+                actual_delivery_date: poDate || null,   
                 user_id: sessionStorage.getItem('user_id')
             };
 
@@ -236,8 +268,27 @@ function NewEntryPR() {
         e.preventDefault();
         setSubmitMessage('');
 
+        // Validate required fields
         if (!inspectionNotes.trim()) {
             setSubmitMessage('Please add inspection notes');
+            setMessageType('error');
+            return;
+        }
+
+        if (!iacParticular.trim() && !itemDescription.trim()) {
+            setSubmitMessage('Please provide item particulars');
+            setMessageType('error');
+            return;
+        }
+
+        if (iacQuantityRow2 <= 0) {
+            setSubmitMessage('Please enter a valid quantity');
+            setMessageType('error');
+            return;
+        }
+
+        if (iacUnitCostRow2 <= 0) {
+            setSubmitMessage('Please enter a valid unit cost');
             setMessageType('error');
             return;
         }
@@ -245,12 +296,27 @@ function NewEntryPR() {
         setIsSubmitting(true);
 
         try {
-            // Get or create inspection assignment
+            // Get or create inspection assignment with all PR and ROW 2 data
             const payload = {
                 pr_id: prId,
-                assignment_id: prId, // Using pr_id as fallback if no explicit assignment
+                assignment_id: prId,
                 inspection_notes: inspectionNotes,
                 condition_report: inspectionNotes,
+                // Row 2 Item Details
+                particular: iacParticular || itemDescription,
+                unit_row2: iacUnitRow2 || unit,
+                quantity_row2: iacQuantityRow2,
+                unit_cost_row2: iacUnitCostRow2,
+                amount_row2: iacAmountRow2,
+                grand_total: iacGrandTotal,
+                // Step 1 PR Details (for redundancy prevention)
+                pr_no: prNo,
+                item_description: itemDescription,
+                quantity: quantity,
+                unit_cost: unitCost,
+                total_amount: product,
+                office: office,
+                division_section: divisionSection,
                 user_id: sessionStorage.getItem('user_id')
             };
 
@@ -286,11 +352,49 @@ function NewEntryPR() {
     const handleFormSelection = async () => {
         const formType = product >= AMOUNT_THRESHOLD ? 'ppe' : 'ics';
 
-        // Store PR info for next steps
+        // Store all PR data collected from all steps for next forms (ICS/PPE)
+        const prData = {
+            pr_id: prId,
+            pr_no: prNo,
+            item_no: itemNo,
+            item_description: itemDescription,
+            quantity: quantity,
+            unit: unit,
+            unit_cost: unitCost,
+            total_amount: product,
+            office: office,
+            division_section: divisionSection,
+            date_requested: dateRequested,
+            // Delivery information
+            supplier: supplier,
+            si_no: siNo,
+            po_date: poDate,
+            dr_no: drNo,
+            // IAC information - Row One
+            iac_supplier: iacSupplier,
+            iac_po_date: iacPoDate,
+            iac_requisitioning_office: iacRequisitioningOffice,
+            iac_requisitioning_code: iacRequisitioningCode,
+            iac_iar_no: iacIarNo,
+            iac_date: iacDate,
+            iac_invoice_no: iacInvoiceNo,
+            iac_invoice_date: iacInvoiceDate,
+            // Inspection Notes
+            inspection_notes: inspectionNotes,
+            // IAC information - Row Two
+            iac_particular: iacParticular,
+            iac_unit_row2: iacUnitRow2,
+            iac_quantity_row2: iacQuantityRow2,
+            iac_unit_cost_row2: iacUnitCostRow2,
+            iac_amount_row2: iacAmountRow2,
+            iac_grand_total: iacGrandTotal
+        };
+
         sessionStorage.setItem('current_pr_id', prId);
         sessionStorage.setItem('current_pr_no', prNo);
         sessionStorage.setItem('current_pr_amount', product);
         sessionStorage.setItem('form_type', formType);
+        sessionStorage.setItem('pr_complete_data', JSON.stringify(prData));
 
         if (formType === 'ppe') {
             // ABOVE PAR - Go to PPE Form then Property Tag
@@ -374,7 +478,7 @@ function NewEntryPR() {
                         </center>
 
                         <div className={styles.header}>
-                            <h1>Purchase Request Workflow</h1>
+                            {/* <h1>Purchase Request Workflow</h1> */}
                             {prNo && <span className={styles.statusContainer}>PR: {prNo}</span>}
                             {product > 0 && <span className={styles.statusContainer}>₱{product.toFixed(2)}</span>}
                         </div>
@@ -420,8 +524,16 @@ function NewEntryPR() {
                             {currentStep === 'approval' && (
                                 <div style={inlineStyles.decisionBox}>
                                     <h3>Approval Decision</h3>
-                                    <p>PR No: <strong>{prNo}</strong></p>
-                                    <p>Total Amount: <strong>₱{product.toFixed(2)}</strong></p>
+                                    {/* Display PR Information from Step 1 */}
+                                    <div style={{ backgroundColor: '#fff', padding: '15px', borderRadius: '8px', marginBottom: '20px', textAlign: 'left', border: '1px solid #ddd' }}>
+                                        <p><strong>PR No:</strong> {prNo}</p>
+                                        <p><strong>Item:</strong> {itemDescription}</p>
+                                        <p><strong>Quantity:</strong> {quantity} {unit}</p>
+                                        <p><strong>Unit Cost:</strong> ₱{unitCost.toFixed(2)}</p>
+                                        <p><strong>Office:</strong> {office}</p>
+                                        {divisionSection && <p><strong>Division/Section:</strong> {divisionSection}</p>}
+                                        <p><strong>Total Amount:</strong> ₱{product.toFixed(2)}</p>
+                                    </div>
                                     <div style={inlineStyles.decisionButtons}>
                                         <button 
                                             style={{...inlineStyles.decisionBtn, backgroundColor: '#28a745'}}
@@ -441,11 +553,39 @@ function NewEntryPR() {
                                 </div>
                             )}
 
-                            {/* STEP 3: Delivery Notes & IAC */}
+                            {/*  --------------  STEP 3: Delivery Notes & IAC  --------------   */}
                             {currentStep === 'delivery_note' && (
                                 <form onSubmit={handleDeliveryNote}>
-                                    <h3>Inspection Acceptance Certificate (IAC)</h3>
+                                    {/* Display PR Information from Step 1 */}
+                                    <div style={{ backgroundColor: '#f8f9fa', padding: '15px', borderRadius: '8px', marginBottom: '20px' }}>
+                                        <p><strong>PR No:</strong> {prNo}</p>
+                                        <p><strong>Item:</strong> {itemDescription}</p>
+                                        <p><strong>Quantity:</strong> {quantity} {unit}</p>
+                                        <p><strong>Office:</strong> {office}</p>
+                                        <p><strong>Division/Section:</strong> {divisionSection}</p>
+                                    </div>
 
+                                    {/* Delivery Form Fields */}
+                                     <input type="text" placeholder="Supplier" value={supplier} onChange={(e) => setSupplier(e.target.value)} />
+                                      <input type="text" placeholder="PR No." value={prNo} disabled />
+                                     <input type="text" placeholder="SI No." value={siNo} onChange={(e) => setSiNo(e.target.value)} />
+                                     <input type="date" placeholder="PO Date" value={poDate} onChange={(e) => setPoDate(e.target.value)} />
+                                     <input type="text" placeholder="DR No." value={drNo} onChange={(e) => setDrNo(e.target.value)} />
+                                     
+                                     
+                                     
+                                     <button className={styles.nextBtn} type="submit" disabled={isSubmitting}>
+                                     {isSubmitting ? 'Saving...' : 'Next: Inspection'}
+                                    </button>
+                                </form>
+                            )}
+
+                                    
+                            {/*  --------------  STEP 4: Inspection & Acceptance  --------------   */}
+                            
+                            {currentStep === 'inspection' && (
+                                <form onSubmit={handleInspection}>
+                                    
                                     {/* Display PR Summary */}
                                     <div style={{ backgroundColor: '#f8f9fa', padding: '15px', borderRadius: '8px', marginBottom: '20px' }}>
                                         <p><strong>PR No:</strong> {prNo}</p>
@@ -453,6 +593,17 @@ function NewEntryPR() {
                                         <p><strong>Quantity:</strong> {quantity} {unit}</p>
                                         <p><strong>Total Amount:</strong> ₱{product.toFixed(2)}</p>
                                     </div>
+
+                                    {/* Display Delivery Information from Step 3 */}
+                                    {(supplier || siNo || poDate || drNo) && (
+                                        <div style={{ backgroundColor: '#e8f4f8', padding: '15px', borderRadius: '8px', marginBottom: '20px', border: '2px solid #0066cc' }}>
+                                            <h4 style={{ marginTop: 0, marginBottom: '10px', color: '#333' }}>Delivery Information (from Previous Step)</h4>
+                                            {supplier && <p><strong>Supplier:</strong> {supplier}</p>}
+                                            {siNo && <p><strong>SI No:</strong> {siNo}</p>}
+                                            {poDate && <p><strong>PO Date:</strong> {poDate}</p>}
+                                            {drNo && <p><strong>DR No:</strong> {drNo}</p>}
+                                        </div>
+                                    )}
 
                                     {/* TABLE ROW ONE - IAC Fields */}
                                     <div style={{ 
@@ -472,7 +623,7 @@ function NewEntryPR() {
                                                 </label>
                                                 <input
                                                     type="text"
-                                                    value={iacSupplier}
+                                                    value={iacSupplier || supplier}
                                                     onChange={(e) => setIacSupplier(e.target.value)}
                                                     placeholder="Supplier Name (50 chars max)"
                                                     maxLength="50"
@@ -487,7 +638,7 @@ function NewEntryPR() {
                                                 </label>
                                                 <input
                                                     type="date"
-                                                    value={iacPoDate}
+                                                    value={iacPoDate || poDate}
                                                     onChange={(e) => setIacPoDate(e.target.value)}
                                                     style={{ width: '100%', padding: '8px', border: '1px solid #ddd', borderRadius: '4px', boxSizing: 'border-box' }}
                                                 />
@@ -499,7 +650,7 @@ function NewEntryPR() {
                                                     Requisitioning Office/Dept <span style={{ color: 'red' }}>*</span>
                                                 </label>
                                                 <select
-                                                    value={iacRequisitioningOffice}
+                                                    value={iacRequisitioningOffice || office}
                                                     onChange={(e) => setIacRequisitioningOffice(e.target.value)}
                                                     style={{ width: '100%', padding: '8px', border: '1px solid #ddd', borderRadius: '4px', boxSizing: 'border-box' }}
                                                 >
@@ -592,15 +743,111 @@ function NewEntryPR() {
                                     {/* Delivery Information Notes */}
                                     <div style={{ marginBottom: '20px' }}>
                                         <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500', fontSize: '14px' }}>
-                                            Delivery Information & Remarks
+                                            Inspection Notes & Remarks <span style={{ color: 'red' }}>*</span>
                                         </label>
                                         <textarea
-                                            placeholder="Enter delivery information: actual delivery date, recipient name, contact person, delivery address, delivery condition, remarks, etc."
-                                            value={deliveryNotes}
-                                            onChange={(e) => setDeliveryNotes(e.target.value)}
+                                            placeholder="Enter inspection findings: item condition, quantity verified, quality assessment, acceptance status, remarks, etc."
+                                            value={inspectionNotes}
+                                            onChange={(e) => setInspectionNotes(e.target.value)}
                                             rows="5"
                                             style={{ width: '100%', padding: '10px', marginBottom: '15px', boxSizing: 'border-box', border: '1px solid #ddd', borderRadius: '4px' }}
+                                            required
                                         />
+                                    </div>
+
+                                    {/* TABLE ROW TWO - Item Details with Calculation */}
+                                    <div style={{ 
+                                        backgroundColor: '#fff', 
+                                        border: '2px solid #ddd', 
+                                        borderRadius: '8px', 
+                                        padding: '20px', 
+                                        marginBottom: '20px' 
+                                    }}>
+                                        <h4 style={{ marginTop: 0, marginBottom: '15px', color: '#333' }}></h4>
+                                        
+                                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '15px', marginBottom: '15px' }}>
+                                            {/* Particular */}
+                                            <div>
+                                                <label style={{ display: 'block', marginBottom: '5px', fontWeight: '500', fontSize: '14px' }}>
+                                                    Particular <span style={{ color: 'red' }}>*</span>
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    value={iacParticular || itemDescription}
+                                                    onChange={(e) => setIacParticular(e.target.value)}
+                                                    placeholder="Item particulars"
+                                                    style={{ width: '100%', padding: '8px', border: '1px solid #ddd', borderRadius: '4px', boxSizing: 'border-box' }}
+                                                />
+                                            </div>
+
+                                            {/* Unit */}
+                                            <div>
+                                                <label style={{ display: 'block', marginBottom: '5px', fontWeight: '500', fontSize: '14px' }}>
+                                                    Unit <span style={{ color: 'red' }}>*</span>
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    value={iacUnitRow2 || unit}
+                                                    onChange={(e) => setIacUnitRow2(e.target.value)}
+                                                    placeholder="e.g., pcs, set, box"
+                                                    style={{ width: '100%', padding: '8px', border: '1px solid #ddd', borderRadius: '4px', boxSizing: 'border-box' }}
+                                                />
+                                            </div>
+
+                                            {/* Quantity */}
+                                            <div>
+                                                <label style={{ display: 'block', marginBottom: '5px', fontWeight: '500', fontSize: '14px' }}>
+                                                    Quantity <span style={{ color: 'red' }}>*</span>
+                                                </label>
+                                                <input
+                                                    type="number"
+                                                    value={iacQuantityRow2 || ''}
+                                                    onChange={(e) => setIacQuantityRow2(e.target.value ? parseFloat(e.target.value) : 0)}
+                                                    placeholder="0"
+                                                    style={{ width: '100%', padding: '8px', border: '1px solid #ddd', borderRadius: '4px', boxSizing: 'border-box' }}
+                                                />
+                                            </div>
+
+                                            {/* Unit Cost */}
+                                            <div>
+                                                <label style={{ display: 'block', marginBottom: '5px', fontWeight: '500', fontSize: '14px' }}>
+                                                    Unit Cost <span style={{ color: 'red' }}>*</span>
+                                                </label>
+                                                <input
+                                                    type="number"
+                                                    value={iacUnitCostRow2 || ''}
+                                                    onChange={(e) => setIacUnitCostRow2(e.target.value ? parseFloat(e.target.value) : 0)}
+                                                    placeholder="0.00"
+                                                    style={{ width: '100%', padding: '8px', border: '1px solid #ddd', borderRadius: '4px', boxSizing: 'border-box' }}
+                                                />
+                                            </div>
+
+                                            {/* Amount (Auto-calculated) */}
+                                            <div>
+                                                <label style={{ display: 'block', marginBottom: '5px', fontWeight: '500', fontSize: '14px' }}>
+                                                    Amount
+                                                </label>
+                                                <input
+                                                    type="number"
+                                                    value={iacAmountRow2.toFixed(2)}
+                                                    disabled
+                                                    style={{ width: '100%', padding: '8px', border: '1px solid #ddd', borderRadius: '4px', boxSizing: 'border-box', backgroundColor: '#f5f5f5' }}
+                                                />
+                                            </div>
+
+                                            {/* Grand Total (Auto-calculated) */}
+                                            <div>
+                                                <label style={{ display: 'block', marginBottom: '5px', fontWeight: '500', fontSize: '14px', fontWeight: 'bold', color: '#d9534f' }}>
+                                                    Grand Total
+                                                </label>
+                                                <input
+                                                    type="number"
+                                                    value={iacGrandTotal.toFixed(2)}
+                                                    disabled
+                                                    style={{ width: '100%', padding: '8px', border: '2px solid #d9534f', borderRadius: '4px', boxSizing: 'border-box', backgroundColor: '#fff3cd', fontWeight: 'bold' }}
+                                                />
+                                            </div>
+                                        </div>
                                     </div>
 
                                     <button className={styles.nextBtn} type="submit" disabled={isSubmitting}>
@@ -609,30 +856,41 @@ function NewEntryPR() {
                                 </form>
                             )}
 
-                            {/* STEP 4: Inspection & Acceptance */}
-                            {currentStep === 'inspection' && (
-                                <form onSubmit={handleInspection}>
-                                    <h3>Inspection & Acceptance Certificate</h3>
-                                    <textarea
-                                        placeholder="Condition report, findings, acceptance status, Inspector name, etc."
-                                        value={inspectionNotes}
-                                        onChange={(e) => setInspectionNotes(e.target.value)}
-                                        rows="5"
-                                        style={{ width: '100%', padding: '10px', marginBottom: '15px', boxSizing: 'border-box' }}
-                                    />
-                                    <button className={styles.nextBtn} type="submit" disabled={isSubmitting}>
-                                        {isSubmitting ? 'Saving...' : 'Next: Form Selection'}
-                                    </button>
-                                </form>
-                            )}
+                                   
+
 
                             {/* STEP 5: Form Selection */}
                             {currentStep === 'form_selection' && (
                                 <div style={inlineStyles.selectionBox}>
                                     <h3>Inventory Form Selection</h3>
-                                    <p style={{ marginBottom: '20px' }}>
-                                        Amount: <strong>₱{product.toFixed(2)}</strong> (Threshold: ₱50,000)
-                                    </p>
+                                    
+                                    {/* Display Complete PR Summary */}
+                                    <div style={{ backgroundColor: '#f8f9fa', padding: '15px', borderRadius: '8px', marginBottom: '20px', textAlign: 'left', border: '1px solid #ddd' }}>
+                                        <h4 style={{ marginTop: 0 }}>Purchase Request Summary</h4>
+                                        <p><strong>PR No:</strong> {prNo}</p>
+                                        <p><strong>Item:</strong> {itemDescription}</p>
+                                        <p><strong>Quantity:</strong> {quantity} {unit}</p>
+                                        <p><strong>Unit Cost:</strong> ₱{unitCost.toFixed(2)}</p>
+                                        <p><strong>Office:</strong> {office}</p>
+                                        {divisionSection && <p><strong>Division/Section:</strong> {divisionSection}</p>}
+                                        <p><strong>Total Amount:</strong> ₱{product.toFixed(2)}</p>
+                                    </div>
+
+                                    {supplier && (
+                                        <div style={{ backgroundColor: '#e8f4f8', padding: '15px', borderRadius: '8px', marginBottom: '20px', textAlign: 'left', border: '1px solid #0066cc' }}>
+                                            <h4 style={{ marginTop: 0 }}>Delivery Information</h4>
+                                            <p><strong>Supplier:</strong> {supplier}</p>
+                                            {siNo && <p><strong>SI No:</strong> {siNo}</p>}
+                                            {poDate && <p><strong>PO Date:</strong> {poDate}</p>}
+                                            {drNo && <p><strong>DR No:</strong> {drNo}</p>}
+                                        </div>
+                                    )}
+
+                                    <div style={{ marginBottom: '20px' }}>
+                                        <p style={{ fontSize: '16px', marginBottom: '10px' }}>
+                                            Amount: <strong>₱{product.toFixed(2)}</strong> (Threshold: ₱50,000)
+                                        </p>
+                                    </div>
                                     <div style={inlineStyles.selectionOptions}>
                                         {product < AMOUNT_THRESHOLD ? (
                                             <div style={{...inlineStyles.option, backgroundColor: '#e8f4f8', borderColor: '#0066cc'}}>
@@ -664,14 +922,21 @@ function NewEntryPR() {
                             <div className={styles.buttonWrapper}>
                                 {currentStep !== 'create' && (
                                     <button 
+                                        type="button"
                                         className={styles.backBtn}
                                         onClick={() => {
                                             const steps = ['create', 'approval', 'delivery_note', 'inspection', 'form_selection'];
                                             const currentIdx = steps.indexOf(currentStep);
-                                            if (currentIdx > 0) setCurrentStep(steps[currentIdx - 1]);
+                                            if (currentIdx > 0) {
+                                                const previousStep = steps[currentIdx - 1];
+                                                setCurrentStep(previousStep);
+                                                // Clear any error/success messages when navigating back
+                                                setSubmitMessage('');
+                                            }
                                         }}
+                                        disabled={isSubmitting}
                                     >
-                                        Back
+                                        ← Back
                                     </button>
                                 )}
                             </div>
@@ -683,5 +948,11 @@ function NewEntryPR() {
     </>
     );
 }
+
+export const PurchaseRequestData = {
+    unitCost: 0,
+    quantity: 1,
+    unit: ''
+};
 
 export default NewEntryPR;

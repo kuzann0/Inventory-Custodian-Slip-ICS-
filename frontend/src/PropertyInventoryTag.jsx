@@ -10,12 +10,13 @@ const PropertyInventoryTag = () => {
     property_number: '',
     model_number: '',
     description: '',
-    unit_of_measure: '',
+    unit_cost: '',
     acquisition_date: '',
-    supplier: '',
+    assignee: '',
     estimated_cost: '',
     serial_number: '',
     location: '',
+    inspected_by: '',
     status: 'serviceable'
   });
   const [message, setMessage] = useState('');
@@ -23,22 +24,41 @@ const PropertyInventoryTag = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Get PR data from session
+    // Get PR data from session storage (stored from PurchaseRequest workflow)
     const prno = sessionStorage.getItem('current_pr_no');
     const currentPrId = sessionStorage.getItem('current_pr_id');
+    const prCompleteData = sessionStorage.getItem('pr_complete_data');
     
     if (currentPrId) {
       setPrId(parseInt(currentPrId));
     }
 
-    if (prno) {
-      fetchPRData(prno);
-    } else {
-      setLoading(false);
+    // Try to get data from stored complete PR data first
+    if (prCompleteData) {
+      try {
+        const parsedData = JSON.parse(prCompleteData);
+        setPrData(parsedData);
+        setFormData(prev => ({
+          ...prev,
+          description: parsedData.item_description || '',
+          unit_cost: parsedData.unit_cost || '',
+          acquisition_date: parsedData.po_date || parsedData.date_requested || '',
+          estimated_cost: parsedData.total_amount || '',
+          assignee: parsedData.assignee || '',
+          inspected_by: parsedData.inspected_by || ''
+        }));  
+      } catch (error) {
+        console.error('Error parsing PR data:', error);
+      }
     }
+
+    // Don't need to fetch separately since we have all data from workflow
+    setLoading(false);
   }, []);
 
   const fetchPRData = async (prno) => {
+    // This function is deprecated - data is now loaded from sessionStorage
+    // Keeping for backwards compatibility
     try {
       const response = await fetch(`${API_BASE_URL}/get_pr_details.php?pr_no=${prno}`, {
         credentials: 'include'
@@ -49,17 +69,14 @@ const PropertyInventoryTag = () => {
         setFormData(prev => ({
           ...prev,
           description: data.description || '',
-          unit_of_measure: data.unit || '',
+          unit_cost: data.unit_cost || '',
           acquisition_date: data.date_acquired || '',
           estimated_cost: data.total_cost || ''
         }));
       }
     } catch (error) {
-      console.error('Error fetching PR data:', error);
-      setMessage('Failed to load purchase request data');
-      setMessageType('error');
-    } finally {
-      setLoading(false);
+      // Silently fail - data from sessionStorage is used as primary source
+      console.warn('Could not fetch PR data from server, using sessionStorage data');
     }
   };
 
@@ -217,37 +234,37 @@ const PropertyInventoryTag = () => {
                 style={styles.input}
               />
             </div>
-            <div style={styles.formGroup}>
+            {/* <div style={styles.formGroup}>
               <label>Unit of Measure</label>
               <input
                 type="text"
-                name="unit_of_measure"
+                name="unit_cost"
                 placeholder="e.g., pc, set, box"
-                value={formData.unit_of_measure}
+                value={formData.unit_cost}
                 onChange={handleInputChange}
                 style={styles.input}
               />
-            </div>
+            </div> */}
           </div>
 
           <div style={styles.formRow}>
             <div style={styles.formGroup}>
-              <label>Acquisition Date</label>
+              <label>Inventory Date</label>
               <input
                 type="date"
-                name="acquisition_date"
-                value={formData.acquisition_date}
+                name="inventory_date"
+                value={formData.inventory_date}
                 onChange={handleInputChange}
                 style={styles.input}
               />
             </div>
             <div style={styles.formGroup}>
-              <label>Estimated Cost/Value</label>
+              <label>Unit Cost</label>
               <input
                 type="number"
-                name="estimated_cost"
+                name="unit_cost"
                 placeholder="0.00"
-                value={formData.estimated_cost}
+                value={formData.unit_cost}
                 onChange={handleInputChange}
                 style={styles.input}
                 step="0.01"
@@ -257,12 +274,12 @@ const PropertyInventoryTag = () => {
 
           <div style={styles.formRow}>
             <div style={styles.formGroup}>
-              <label>Supplier</label>
+              <label>Assignee</label>
               <input
                 type="text"
-                name="supplier"
-                placeholder="Supplier name"
-                value={formData.supplier}
+                name="assignee"
+                placeholder="Assignee name"
+                value={formData.assignee}
                 onChange={handleInputChange}
                 style={styles.input}
               />
@@ -294,7 +311,20 @@ const PropertyInventoryTag = () => {
               <option value="for_disposal">For Disposal</option>
             </select>
           </div>
+             <  div style={styles.formGroup}>
+              <label>Inspected By</label>
+              <input
+                type="text"
+                name="inspected"
+                placeholder="Inspector Name"
+                value={formData.inspected_by}
+                onChange={handleInputChange}
+                style={styles.input}
+              />
+            </div>
         </div>
+
+
 
         <div style={styles.buttonGroup}>
           <button
