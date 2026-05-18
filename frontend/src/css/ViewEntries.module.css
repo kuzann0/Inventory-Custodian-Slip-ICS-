@@ -1,0 +1,36 @@
+.detailRow {
+  background-color: #f8fafc;
+}
+
+.detailTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  background: white;
+  border: 1px solid #e2e8f0;
+}
+
+.detailTh {
+  background-color: #f1f5f9;
+  font-weight: 600;
+  padding: 8px 12px;
+  text-align: left;
+  width: 180px;
+  border-bottom: 1px solid #e2e8f0;
+  color: #1e293b;
+}
+
+.detailTd {
+  padding: 8px 12px;
+  border-bottom: 1px solid #e2e8f0;
+  color: #0f172a;
+}
+
+.jsonPre {
+  background: #f1f5f9;
+  padding: 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  overflow-x: auto;
+  margin: 0;
+}
