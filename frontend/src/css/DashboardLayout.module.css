@@ -1,0 +1,46 @@
+/* ============================================================
+   DashboardLayout.module.css
+   ============================================================ */
+
+.mainContent {
+  flex: 1;
+  margin-left: var(--nav-width-expanded);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: radial-gradient(circle at 10% 20%, rgba(255,255,245,0.4), rgba(248,250,252,1));
+  transition: margin-left var(--duration-normal) var(--ease-out);
+}
+
+.mainContent.collapsed {
+  margin-left: var(--nav-width-collapsed);
+}
+
+.contentArea {
+  flex: 1;
+  padding: 32px 40px;
+  max-width: 1600px;
+  margin: 0 auto;
+  width: 100%;
+  animation: fadeInUp 0.4s var(--ease-out);
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .contentArea { padding: 24px 28px; }
+}
+@media (max-width: 768px) {
+  .mainContent { margin-left: 0; }
+  .contentArea { padding: 20px 18px; margin-top: 68px; }
+}

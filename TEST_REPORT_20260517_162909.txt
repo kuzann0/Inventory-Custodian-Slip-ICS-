@@ -1,0 +1,32 @@
+-------------------------------------------------------------------------------
+  ICS SYSTEM - COMPREHENSIVE TEST REPORT
+  Date: 2026-05-17 16:29:09
+-------------------------------------------------------------------------------
+
+[TEST 1] Database Connection - ? PASS (Code: 200)
+[TEST 2] SuperAdmin Login - ? PASS (Code: 200)
+[TEST 3] Get All Users - ? PASS (Code: 200)
+[TEST 4] Get Employees - ? PASS (Code: 200)
+[TEST 5] Get Entries - ? PASS (Code: 200)
+[TEST 6] Get Purchase Requests - ? PASS (Code: 200)
+[TEST 7] Get Capabilities - ? PASS (Code: 200)
+[TEST 8] Get User Capabilities - ? PASS (Code: 200)
+[TEST 9] Get Audit Logs - ? FAIL - The remote server returned an error: (500) Internal Server Error.
+[TEST 10] Get Inspection Assignments - ? PASS (Code: 200)
+[TEST 11] Get Admins - ? PASS (Code: 200)
+[TEST 12] Get Process Status - ? PASS (Code: 200)
+[TEST 13] Get Documents - ? PASS (Code: 200)
+[TEST 14] Create Purchase Request - ? FAIL
+[TEST 15] Get Workflow Entry - ? FAIL
+
+-------------------------------------------------------------------------------
+SUMMARY
+-------------------------------------------------------------------------------
+Total Tests: 15
+Passed: 12
+Failed: 3
+Success Rate: 80%
+
+STATUS: ? 3 TEST(S) FAILED
+
+Report saved to: TEST_REPORT_20260517_162909.txt

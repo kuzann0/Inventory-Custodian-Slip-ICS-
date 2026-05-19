@@ -1,0 +1,163 @@
+/* ============================================================
+   Header.module.css – Premium Frosted Glass (Apple-Grade)
+   Refined stickiness, blur, and minimal aesthetics
+   ============================================================ */
+
+.headerContainer {
+  position: sticky;
+  top: 0;
+  z-index: 110;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border-bottom: 0.5px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.02);
+  transition: all var(--duration-normal) var(--ease-out);
+}
+
+.headerContent {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 12px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  min-height: 68px;
+}
+
+/* Brand – gradient text, crisp */
+.brandSection {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brandIcon {
+  font-size: 26px;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.05));
+}
+
+.title {
+  font-size: 1.35rem;
+  font-weight: 620;
+  background: linear-gradient(135deg, #111827 0%, #4f46e5 80%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -0.3px;
+}
+
+/* User section – subtle pill */
+.userSection {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(12px);
+  padding: 6px 12px 6px 8px;
+  border-radius: 40px;
+  border: 0.5px solid rgba(0, 0, 0, 0.06);
+  transition: all 0.2s ease;
+}
+
+.userSection:hover {
+  background: rgba(255, 255, 255, 0.85);
+  border-color: rgba(0, 0, 0, 0.1);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.userInfo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.avatarWrap {
+  padding: 2px;
+  background: linear-gradient(135deg, var(--primary-400), var(--primary-700));
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.avatar {
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, var(--primary-500), var(--primary-800));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 14px;
+  color: white;
+  border: 1.5px solid white;
+}
+
+.userDetails {
+  line-height: 1.3;
+}
+
+.userName {
+  font-size: 14px;
+  font-weight: 590;
+  color: #111827;
+}
+
+.userRole {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--gray-500);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.logoutBtn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 32px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--gray-600);
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.logoutBtn:hover {
+  background: rgba(239, 68, 68, 0.08);
+  color: #dc2626;
+  transform: translateY(-1px);
+}
+
+.logoutBtn:active {
+  transform: scale(0.96);
+}
+
+.logoutArrow svg {
+  stroke: currentColor;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .headerContent { 
+    padding: 10px 20px; 
+  }
+  .title { 
+    font-size: 1.2rem; 
+  }
+  .userDetails { 
+    display: none; 
+  }
+  .logoutLabel { 
+    display: none; 
+  }
+  .logoutBtn { 
+    padding: 8px; 
+  }
+}
