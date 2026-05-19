@@ -277,7 +277,9 @@ UNLOCK TABLES;
 -- Table structure for table `entry_workflow_status` (NEW TABLE FOR DYNAMIC BINDING)
 --
 
-DROP TABLE IF EXISTS `entry_workflow_status`;
+/*workflow_status already handle this*/
+
+DROP TABLE IF EXISTS `workflow_status`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `entry_workflow_status` (

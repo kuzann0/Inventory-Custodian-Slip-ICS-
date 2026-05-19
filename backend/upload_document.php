@@ -3,7 +3,9 @@
  * Upload document
  */
 
-header('Content-Type: application/json; charset=UTF-8');
+header('Content-Type: text/csv; charset=utf-8');
+header('Content-Disposition: attachment; filename="entries_export.csv"');
+
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);

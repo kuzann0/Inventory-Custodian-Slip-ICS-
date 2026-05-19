@@ -136,6 +136,36 @@ try {
             $update_stmt->close();
         }
     }
+        // ------------------------------------------------------------
+    // Update entries table with PPE data
+    // ------------------------------------------------------------
+    if ($pr_id) {
+        $find_entry = $conn->prepare("SELECT entry_id FROM workflow_status WHERE pr_id = ? LIMIT 1");
+        if ($find_entry) {
+            $find_entry->bind_param('i', $pr_id);
+            $find_entry->execute();
+            $res_entry = $find_entry->get_result();
+            if ($entry_row = $res_entry->fetch_assoc()) { 
+                $entry_id = $entry_row['entry_id'];
+                
+                $update_entry = $conn->prepare("
+                    UPDATE entries 
+                    SET SerialNo = ?, 
+                        EstimatedUsefulLife = ?, 
+                        FormType = 'PPE'
+                    WHERE order_id = ?
+                ");
+                if ($update_entry) {
+                    $serial = $data['serial_number'] ?? '';
+                    $est_life = $data['estimated_useful_life'] ?? '';
+                    $update_entry->bind_param('ssi', $serial, $est_life, $entry_id);
+                    $update_entry->execute();
+                    $update_entry->close();
+                }
+            }
+            $find_entry->close();
+        }
+    }
 
     $stmt->close();
     $conn->close();

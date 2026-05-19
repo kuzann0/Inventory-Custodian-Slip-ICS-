@@ -157,6 +157,37 @@ try {
         $audit_stmt->execute();
         $audit_stmt->close();
     }
+    
+        // ------------------------------------------------------------
+    // Update entries table with final property number and serial
+    // ------------------------------------------------------------
+    if ($pr_id) {
+        $find_entry = $conn->prepare("SELECT entry_id FROM workflow_status WHERE pr_id = ? LIMIT 1");
+        if ($find_entry) {
+            $find_entry->bind_param('i', $pr_id);
+            $find_entry->execute();
+            $res_entry = $find_entry->get_result();
+            if ($entry_row = $res_entry->fetch_assoc()) {
+                $entry_id = $entry_row['entry_id'];
+                
+                $update_entry = $conn->prepare("
+                    UPDATE entries 
+                    SET SerialNo = ?, 
+                        InventoryItemNo = ?, 
+                        FormType = 'PPE'
+                    WHERE order_id = ?
+                ");
+                if ($update_entry) {
+                    $serial = $data['serial_number'] ?? '';
+                    $inventory_no = $data['property_number'] ?? '';
+                    $update_entry->bind_param('ssi', $serial, $inventory_no, $entry_id);
+                    $update_entry->execute();
+                    $update_entry->close();
+                }
+            }
+            $find_entry->close();
+        }
+    }
 
     http_response_code(201);
     echo json_encode([

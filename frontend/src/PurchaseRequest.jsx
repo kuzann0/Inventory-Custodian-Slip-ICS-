@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom'
 import API_BASE_URL from './config/api';
 
 // ─── Design tokens ────────────────────────────────────────────────────────────
-// INTEGRATION: UI/UX design system – primary navy palette, DM Sans, thin borders
 const css = `
   @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600&family=DM+Mono:wght@400;500&display=swap');
 
@@ -46,8 +45,6 @@ const css = `
     min-height: 100vh;
     padding: 2rem 1rem;
   }
-
-  /* ── Page card ── */
   .pr-card {
     max-width: 780px;
     margin: 0 auto;
@@ -57,8 +54,6 @@ const css = `
     box-shadow: var(--shadow-md);
     overflow: hidden;
   }
-
-  /* ── Header bar ── */
   .pr-header {
     background: linear-gradient(135deg, var(--navy-deep) 0%, var(--navy-mid) 100%);
     padding: 1.5rem 2rem;
@@ -96,8 +91,6 @@ const css = `
     font-family: var(--mono);
   }
   .pr-badge.amount { background: rgba(26,82,212,0.35); }
-
-  /* ── Step wizard ── */
   .pr-stepper {
     padding: 1.5rem 2rem 0;
   }
@@ -166,13 +159,9 @@ const css = `
   }
   .stepper-label.active { color: var(--accent); font-weight: 600; }
   .stepper-label.done { color: var(--navy); }
-
-  /* ── Body ── */
   .pr-body {
     padding: 1.75rem 2rem 2rem;
   }
-
-  /* ── Section heading ── */
   .section-head {
     font-size: 13px;
     font-weight: 600;
@@ -183,8 +172,6 @@ const css = `
     padding-bottom: 0.5rem;
     border-bottom: 0.5px solid var(--border);
   }
-
-  /* ── Two-column grid ── */
   .field-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -192,8 +179,6 @@ const css = `
   }
   .field-grid.three { grid-template-columns: 1fr 1fr 1fr; }
   .field-grid.full  { grid-template-columns: 1fr; }
-
-  /* ── Label + input combo ── */
   .field {
     display: flex;
     flex-direction: column;
@@ -207,9 +192,6 @@ const css = `
     letter-spacing: 0.01em;
   }
   .field label .req { color: var(--red); margin-left: 2px; }
-
-  /* ── Validation error message under a field ── */
-  /* INTEGRATION: inline validation feedback */
   .field-error {
     font-size: 11px;
     color: var(--red);
@@ -218,7 +200,6 @@ const css = `
     align-items: center;
     gap: 3px;
   }
-
   input[type=text], input[type=number], input[type=date], select, textarea {
     font-family: var(--font);
     font-size: 13.5px;
@@ -248,12 +229,6 @@ const css = `
   }
   select { cursor: pointer; }
   textarea { resize: vertical; min-height: 90px; line-height: 1.5; }
-
-  /* ── Item add row ──
-     INTEGRATION: width bug fix
-     – flex:1 1 0% + min-width:0 + width:0 lets the input shrink freely
-     – flex-shrink:0 + fixed 38×38px on btn-add gives a stable, non-bleeding size
-  ── */
   .add-row {
     display: flex;
     gap: 8px;
@@ -286,8 +261,6 @@ const css = `
   }
   .btn-add:hover { background: var(--navy-mid); }
   .btn-add:active { transform: scale(0.96); }
-
-  /* ── Items table ── */
   .items-box {
     margin-top: 14px;
     border: 0.75px solid var(--border-md);
@@ -331,7 +304,6 @@ const css = `
   .items-table tr:last-child td { border-bottom: none; }
   .items-table .amount-cell { color: var(--green); font-weight: 600; font-family: var(--mono); }
   .items-table .mono { font-family: var(--mono); }
-
   .btn-remove {
     background: none;
     border: none;
@@ -344,7 +316,6 @@ const css = `
     line-height: 1;
   }
   .btn-remove:hover { color: var(--red); background: var(--red-lt); }
-
   .items-footer {
     display: flex;
     justify-content: flex-end;
@@ -362,8 +333,6 @@ const css = `
     font-size: 15px;
     color: var(--green);
   }
-
-  /* ── Info summary card ── */
   .info-card {
     background: var(--surface-2);
     border: 0.5px solid var(--border);
@@ -397,13 +366,9 @@ const css = `
     letter-spacing: 0.06em;
     margin-bottom: 10px;
   }
-
-  /* ── Spacer helpers ── */
   .gap    { margin-bottom: 16px; }
   .gap-sm { margin-bottom: 10px; }
   .gap-lg { margin-bottom: 24px; }
-
-  /* ── Buttons ── */
   .btn {
     font-family: var(--font);
     font-size: 13.5px;
@@ -419,25 +384,19 @@ const css = `
     position: relative;
   }
   .btn:disabled { opacity: 0.55; cursor: not-allowed; }
-
   .btn-primary { background: var(--navy); color: #fff; }
   .btn-primary:hover:not(:disabled) { background: var(--navy-mid); }
   .btn-primary:active:not(:disabled) { transform: scale(0.98); }
-
   .btn-success { background: var(--green); color: #fff; }
   .btn-success:hover:not(:disabled) { background: #156e49; }
-
   .btn-danger { background: var(--red); color: #fff; }
   .btn-danger:hover:not(:disabled) { background: #9b2020; }
-
   .btn-ghost {
     background: transparent;
     color: var(--text-2);
     border: 0.75px solid var(--border-md);
   }
   .btn-ghost:hover:not(:disabled) { background: var(--surface-2); color: var(--text); }
-
-  /* INTEGRATION: loading spinner inside buttons */
   .btn-spinner {
     width: 14px;
     height: 14px;
@@ -448,8 +407,6 @@ const css = `
     flex-shrink: 0;
   }
   @keyframes spin { to { transform: rotate(360deg); } }
-
-  /* ── Certification toggles ── */
   .cert-group {
     display: flex;
     gap: 8px;
@@ -473,8 +430,6 @@ const css = `
     color: #fff;
     border-color: var(--navy);
   }
-
-  /* ── Decision area (step 2) ── */
   .decision-area {
     text-align: center;
     padding: 2rem 0 1rem;
@@ -486,8 +441,6 @@ const css = `
     margin-top: 1.5rem;
   }
   .decision-btns .btn { min-width: 140px; font-size: 14px; padding: 11px 24px; }
-
-  /* ── Form selection cards ── */
   .form-select-options {
     display: flex;
     gap: 16px;
@@ -507,9 +460,6 @@ const css = `
   .form-opt.active-ppe { border-color: var(--amber);  background: var(--amber-lt); }
   .form-opt h4 { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
   .form-opt p  { font-size: 12px; color: var(--text-2); }
-
-  /* ── Toast / message bar ── */
-  /* INTEGRATION: UI/UX + error handling – toast replaces plain alert() */
   .toast {
     margin: 14px 2rem 0;
     padding: 10px 16px;
@@ -523,8 +473,6 @@ const css = `
   }
   .toast.success { background: var(--green-lt); color: var(--green); border: 0.5px solid rgba(26,140,91,0.3); }
   .toast.error   { background: var(--red-lt);   color: var(--red);   border: 0.5px solid rgba(197,48,48,0.3); }
-
-  /* ── Footer row ── */
   .pr-footer {
     padding: 1rem 2rem 1.5rem;
     display: flex;
@@ -533,8 +481,6 @@ const css = `
     border-top: 0.5px solid var(--border);
     margin-top: 1.5rem;
   }
-
-  /* ── Inspection remarks input ── */
   .remarks-input {
     font-size: 12px;
     padding: 5px 8px;
@@ -542,14 +488,11 @@ const css = `
     border-radius: 4px;
     width: 100%;
   }
-
-  /* ── Section divider ── */
   .divider {
     border: none;
     border-top: 0.5px solid var(--border);
     margin: 20px 0;
   }
-
   @media (max-width: 600px) {
     .pr-shell { padding: 0.75rem 0.5rem; }
     .pr-header, .pr-body, .pr-footer { padding-left: 1rem; padding-right: 1rem; }
@@ -600,15 +543,12 @@ const OFFICE_OPTIONS = [
 ];
 
 const DESIGNATION_OPTIONS = [
-
   'Administrative Aide lV',
   'Administrative Aide Vl',
   'Administrative Assistant l',
   'Administrative Assistant ll',
   'Administrative Assistant lll',
   'Administrative Assistant V',
-  
-  
 ];
 
 const IAC_OFFICES = [
@@ -617,9 +557,7 @@ const IAC_OFFICES = [
   'Overseas Shipping Service (OSS)','Franchising Service (FS)','Maritime Safety Service (MSS)',
 ];
 
-// INTEGRATION: declared once here – removed duplicate declaration that caused runtime error
 const AMOUNT_THRESHOLD = 50000;
-
 const fmt = (n) => `₱${parseFloat(n || 0).toFixed(2)}`;
 
 // ─── Reusable Field ───────────────────────────────────────────────────────────
@@ -628,14 +566,12 @@ function Field({ label, req, span2, error, children }) {
     <div className={`field${span2 ? ' span2' : ''}`}>
       <label>{label}{req && <span className="req">*</span>}</label>
       {children}
-      {/* INTEGRATION: inline validation message */}
       {error && <span className="field-error">⚠ {error}</span>}
     </div>
   );
 }
 
-// ─── Spinner (used inside submit buttons) ────────────────────────────────────
-// INTEGRATION: prevents double-submission and shows loading state
+// ─── Spinner ─────────────────────────────────────────────────────────────────
 function Spinner() {
   return <span className="btn-spinner" aria-hidden="true" />;
 }
@@ -750,17 +686,10 @@ function Stepper({ currentStep }) {
 function NewEntryPR() {
   const navigate = useNavigate();
 
-  // ─── INTEGRATION: safe-fetch utility ───────────────────────────────────────
-  // Fixes:
-  //  • "Unexpected end of JSON input"  → reads body as text first, then parses
-  //  • 404 on missing endpoints        → detects non-2xx before JSON.parse
-  //  • Double-submit / UX              → caller sets isSubmitting before calling
-  //  • Auto-retry on pure network error (one attempt)
+  // safePost utility (unchanged)
   const safePost = async (endpoint, payload, attempt = 1) => {
-    // Construct URL: normalise slashes so it works with or without trailing slash
     const url = `${API_BASE_URL.replace(/\/$/, '')}/${endpoint.replace(/^\//, '')}`;
     let response;
-
     try {
       response = await fetch(url, {
         method: 'POST',
@@ -776,154 +705,131 @@ function NewEntryPR() {
         console.warn(`[safePost] network error on ${url}, retrying once…`, networkErr);
         return safePost(endpoint, payload, 2);
       }
-      throw new Error(
-        `Network error – could not reach ${endpoint}. ` +
-        `Check your connection or server CORS settings. (${networkErr.message})`
-      );
+      throw new Error(`Network error – could not reach ${endpoint}. (${networkErr.message})`);
     }
-
     const rawText = await response.text();
-
     if (response.status === 404) {
-      console.error(`[safePost] 404 – ${url} not found.`);
-      throw new Error(
-        `Endpoint not found (404): ${endpoint}. ` +
-        `Ensure the PHP file exists at the correct server path and API_BASE_URL is correct.`
-      );
+      throw new Error(`Endpoint not found (404): ${endpoint}. Ensure the PHP file exists.`);
     }
-
     if (!response.ok) {
-      console.error(`[safePost] HTTP ${response.status} from ${url}:`, rawText.slice(0, 400));
-      throw new Error(`Server error (HTTP ${response.status}). Please try again or contact support.`);
+      throw new Error(`Server error (HTTP ${response.status}). Please try again.`);
     }
-
     if (!rawText.trim()) {
-      console.error(`[safePost] Empty response from ${url}.`);
       throw new Error(`The server returned an empty response. Check PHP error logs.`);
     }
-
     let result;
     try {
       result = JSON.parse(rawText);
     } catch (parseErr) {
-      console.error(`[safePost] JSON parse failed for ${url}. Raw:`, rawText.slice(0, 600));
-      throw new Error(
-        `Invalid response from the server. It may be outputting PHP warnings before JSON. ` +
-        `Preview: ${rawText.slice(0, 100)}`
-      );
+      throw new Error(`Invalid response from the server. Preview: ${rawText.slice(0, 100)}`);
     }
-
     return result;
   };
 
-  // ─── State (UNCHANGED logic) ───────────────────────────────────────────────
+  // ─── State (unchanged) ─────────────────────────────────────────────────────
   const [currentStep, setCurrentStep] = useState('create');
 
-  // PR header fields
-  const [prNo,            setPrNo]            = useState('');
-  const [office,          setOffice]          = useState('');
+  const [prNo, setPrNo] = useState('');
+  const [office, setOffice] = useState('');
   const [divisionSection, setDivisionSection] = useState('');
-  const [dateRequested,   setDateRequested]   = useState('');
-  const [certification,   setCertification]   = useState('');
+  const [dateRequested, setDateRequested] = useState('');
+  const [certification, setCertification] = useState('');
   const [itemDescription, setItemDescription] = useState('');
-  const [itemNo,          setItemNo]          = useState('');
-  const [name,            setName]            = useState('');
-  const [designation,     setDesignation]     = useState('');
-  const [purpose,         setPurpose]         = useState('');
-
-  // Legacy top-level quantity/unit/cost (kept for compatibility)
-  const [quantity,  setQuantity]  = useState('');
-  const [unit,      setUnit]      = useState('');
-  const [unitCost,  setUnitCost]  = useState('');
-
-  // Item row inputs
+  const [itemNo, setItemNo] = useState('');
+  const [name, setName] = useState('');
+  const [designation, setDesignation] = useState('');
+  const [purpose, setPurpose] = useState('');
+  const [quantity, setQuantity] = useState('');
+  const [unit, setUnit] = useState('');
+  const [unitCost, setUnitCost] = useState('');
   const [inputParticular, setInputParticular] = useState('');
-  const [inputUnit,       setInputUnit]       = useState('');
-  const [inputQuantity,   setInputQuantity]   = useState(0);
-  const [inputUnitCost,   setInputUnitCost]   = useState(0);
+  const [inputUnit, setInputUnit] = useState('');
+  const [inputQuantity, setInputQuantity] = useState(0);
+  const [inputUnitCost, setInputUnitCost] = useState(0);
   const [particularItems, setParticularItems] = useState([]);
-
-  // INTEGRATION: per-field validation errors for the add-row
   const [rowErrors, setRowErrors] = useState({});
-
-  // Delivery fields
-  const [supplier,    setSupplier]    = useState('');
-  const [siNo,        setSiNo]        = useState('');
-  const [poDate,      setPoDate]      = useState('');
-  const [drNo,        setDrNo]        = useState('');
-  const [amount,      setAmount]      = useState('');
-  const [preparedBy,  setPreparedBy]  = useState('');
-  const [notedBy,     setNotedBy]     = useState('');
+  const [supplier, setSupplier] = useState('');
+  const [siNo, setSiNo] = useState('');
+  const [poDate, setPoDate] = useState('');
+  const [drNo, setDrNo] = useState('');
+  const [amount, setAmount] = useState('');
+  const [preparedBy, setPreparedBy] = useState('');
+  const [notedBy, setNotedBy] = useState('');
   const [deliveryNotes, setDeliveryNotes] = useState('');
-
-  // Inspection / IAC fields
-  const [inspectionNotes,         setInspectionNotes]         = useState('');
-  const [iacSupplier,             setIacSupplier]             = useState('');
-  const [iacPoNo,                 setIacPoNo]                 = useState('');
-  const [iacPoDate,               setIacPoDate]               = useState('');
+  const [inspectionNotes, setInspectionNotes] = useState('');
+  const [iacSupplier, setIacSupplier] = useState('');
+  const [iacPoNo, setIacPoNo] = useState('');
+  const [iacPoDate, setIacPoDate] = useState('');
   const [iacRequisitioningOffice, setIacRequisitioningOffice] = useState('');
-  const [iacRequisitioningCode,   setIacRequisitioningCode]   = useState('');
-  const [iacIarNo,                setIacIarNo]                = useState('');
-  const [iacDate,                 setIacDate]                 = useState('');
-  const [iacInvoiceNo,            setIacInvoiceNo]            = useState('');
-  const [iacInvoiceDate,          setIacInvoiceDate]          = useState('');
-
-  // Workflow state
+  const [iacRequisitioningCode, setIacRequisitioningCode] = useState('');
+  const [iacIarNo, setIacIarNo] = useState('');
+  const [iacDate, setIacDate] = useState('');
+  const [iacInvoiceNo, setIacInvoiceNo] = useState('');
+  const [iacInvoiceDate, setIacInvoiceDate] = useState('');
   const [approvalDecision, setApprovalDecision] = useState(null);
-  const [prId,             setPrId]             = useState(null);
-
-  // INTEGRATION: UI state
-  const [isSubmitting,  setIsSubmitting]  = useState(false);
+  const [prId, setPrId] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState('');
-  const [messageType,   setMessageType]   = useState(''); // 'success' | 'error'
+  const [messageType, setMessageType] = useState('');
 
   // Derived values
   const grandTotal  = particularItems.reduce((t, i) => t + i.quantity * i.unitCost, 0);
   const totalAmount = grandTotal;
   const isICS       = totalAmount < AMOUNT_THRESHOLD;
 
-  // Restore PR No. from session (e.g. after navigation away and back)
+  // ─── NEW: state for download button validation ─────────────────────────────
+  const [isFormComplete, setIsFormComplete] = useState(false);
+
+  // Restore PR No. from session
   useEffect(() => {
     const saved = sessionStorage.getItem('new_pr_name');
     if (saved) { setPrNo(saved); sessionStorage.removeItem('new_pr_name'); }
   }, []);
 
-  // Pre-fill IAC fields from delivery data when reaching inspection
+  // Pre-fill IAC fields from delivery data
   useEffect(() => {
     if (currentStep === 'inspection') {
-      if (office   && !iacRequisitioningOffice) setIacRequisitioningOffice(office);
-      if (supplier && !iacSupplier)             setIacSupplier(supplier);
-      if (poDate   && !iacPoDate)               setIacPoDate(poDate);
+      if (office && !iacRequisitioningOffice) setIacRequisitioningOffice(office);
+      if (supplier && !iacSupplier) setIacSupplier(supplier);
+      if (poDate && !iacPoDate) setIacPoDate(poDate);
     }
-  }, [currentStep]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [currentStep]);
 
-  // ─── Add-item handler (UNCHANGED logic + inline validation) ───────────────
+  // ─── NEW: validate required fields for download button ─────────────────────
+  useEffect(() => {
+    const required = [
+      prNo.trim() !== '',
+      office.trim() !== '',
+      divisionSection.trim() !== '',
+      dateRequested.trim() !== '',
+      name.trim() !== '',
+      designation.trim() !== '',
+      purpose.trim() !== '',
+      particularItems.length > 0
+    ];
+    setIsFormComplete(required.every(Boolean));
+  }, [prNo, office, divisionSection, dateRequested, name, designation, purpose, particularItems]);
+
+  // ─── Add-item handler (unchanged) ─────────────────────────────────────────
   const addItemHandler = () => {
-    // INTEGRATION: inline validation replaces alert() calls
     const errs = {};
-    if (!inputParticular.trim())   errs.particular = 'Please enter item particulars.';
-    if (!inputUnit)                errs.unit       = 'Please select a unit.';
-    if (inputQuantity <= 0)        errs.quantity   = 'Quantity must be greater than 0.';
-    if (inputUnitCost <= 0)        errs.unitCost   = 'Unit cost must be greater than 0.';
-
-    // INTEGRATION: duplicate description check
+    if (!inputParticular.trim()) errs.particular = 'Please enter item particulars.';
+    if (!inputUnit) errs.unit = 'Please select a unit.';
+    if (inputQuantity <= 0) errs.quantity = 'Quantity must be greater than 0.';
+    if (inputUnitCost <= 0) errs.unitCost = 'Unit cost must be greater than 0.';
     const isDuplicate = particularItems.some(
       (i) => i.particular.toLowerCase() === inputParticular.trim().toLowerCase()
     );
-    if (isDuplicate && !errs.particular) {
-      errs.particular = 'This item description already exists.';
-    }
-
+    if (isDuplicate && !errs.particular) errs.particular = 'This item description already exists.';
     setRowErrors(errs);
     if (Object.keys(errs).length > 0) return;
-
     const newItem = {
-      id:        Date.now(),
+      id: Date.now(),
       particular: inputParticular.trim(),
-      unit:       inputUnit,
-      quantity:   inputQuantity,
-      unitCost:   inputUnitCost,
-      amount:     inputQuantity * inputUnitCost,
+      unit: inputUnit,
+      quantity: inputQuantity,
+      unitCost: inputUnitCost,
+      amount: inputQuantity * inputUnitCost,
     };
     setParticularItems([...particularItems, newItem]);
     setInputParticular('');
@@ -933,19 +839,13 @@ function NewEntryPR() {
     setRowErrors({});
   };
 
-  // UNCHANGED
   const removeItemHandler = (item_id) => {
     setParticularItems(particularItems.filter(i => i.id !== item_id));
   };
 
-  // ─── Step 1: Cancel handler ───────────────────────────────────────────────
+  // ─── Cancel handler ───────────────────────────────────────────────────────
   const handleCancelCreate = () => {
-    // Optional: confirm with user before clearing
-    if (!window.confirm('Clear all fields and cancel? This cannot be undone.')) {
-      return;
-    }
-
-    // Reset all PR header fields
+    if (!window.confirm('Clear all fields and cancel? This cannot be undone.')) return;
     setPrNo('');
     setOffice('');
     setDivisionSection('');
@@ -956,72 +856,90 @@ function NewEntryPR() {
     setName('');
     setDesignation('');
     setPurpose('');
-
-    // Clear particular items
     setParticularItems([]);
-
-    // Clear scratch input fields
     setInputParticular('');
     setInputUnit('');
     setInputQuantity(0);
     setInputUnitCost(0);
-
-    // Clear row errors
     setRowErrors({});
-
-    // Clear any partial data from sessionStorage
     sessionStorage.removeItem('new_pr_name');
-
-    // Clear UI messages
     setSubmitMessage('');
     setMessageType('');
-
-    // Navigate back to dashboard
     navigate('/dashboard');
   };
 
-  // ─── Step 1: Create PR ────────────────────────────────────────────────────
+  // ─── NEW: CSV download handler (frontend only) ────────────────────────────
+  const handleDownloadCSV = () => {
+    const columns = [
+      'PR No.', 'Office', 'Division/Section', 'Date Requested',
+      'Name', 'Designation', 'Purpose', 'Total Amount (₱)',
+      'Item Description', 'Quantity', 'Unit', 'Unit Cost (₱)', 'Amount (₱)'
+    ];
+
+    const csvRows = [];
+    csvRows.push(columns.join(','));
+
+    particularItems.forEach(item => {
+      const row = [
+        `"${prNo}"`,
+        `"${office}"`,
+        `"${divisionSection}"`,
+        `"${dateRequested}"`,
+        `"${name}"`,
+        `"${designation}"`,
+        `"${purpose}"`,
+        totalAmount.toFixed(2),
+        `"${item.particular}"`,
+        item.quantity,
+        `"${item.unit}"`,
+        item.unitCost.toFixed(2),
+        (item.quantity * item.unitCost).toFixed(2)
+      ];
+      csvRows.push(row.join(','));
+    });
+
+    const blob = new Blob(['\uFEFF' + csvRows.join('\n')], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `PR_Form_${prNo}.csv`;
+    link.click();
+    URL.revokeObjectURL(link.href);
+  };
+
+  // ─── Step 1: Create PR (removed nested download handler) ──────────────────
   const handleCreatePR = async (e) => {
     e.preventDefault();
     setSubmitMessage('');
-
-    // INTEGRATION: guard – must have at least one item
     if (particularItems.length === 0) {
       setSubmitMessage('Please add at least one item before submitting.');
       setMessageType('error');
       return;
     }
-
-    setIsSubmitting(true); // INTEGRATION: disables button + shows spinner
+    setIsSubmitting(true);
     try {
       const totalQty = particularItems.reduce((s, i) => s + i.quantity, 0);
       const payload = {
-        pr_no:           prNo,
-        item_name:       particularItems,
-        description:     particularItems.map(i => i.particular).join(', '),
-        quantity:        totalQty,
-        unit:            'items',
-        unit_cost:       totalAmount / Math.max(totalQty, 1),
-        total_amount:    totalAmount,
+        pr_no: prNo,
+        item_name: particularItems,
+        description: particularItems.map(i => i.particular).join(', '),
+        quantity: totalQty,
+        unit: 'items',
+        unit_cost: totalAmount / Math.max(totalQty, 1),
+        total_amount: totalAmount,
         office,
         division_section: divisionSection,
-        date_requested:  dateRequested,
+        date_requested: dateRequested,
         name,
         designation,
         purpose,
         certification,
-        items:           particularItems,
-        user_id:         sessionStorage.getItem('user_id'),
+        items: particularItems,
+        user_id: sessionStorage.getItem('user_id'),
       };
-
       const result = await safePost('/submit_purchase_request.php', payload);
-
       if (result.success) {
-        // INTEGRATION: capture the actual PR number from response (may include auto-generated suffix)
         setPrId(result.pr_id);
         setPrNo(result.pr_no);
-        
-        // Show actual PR number in case it was auto-modified
         const finalPrNo = result.pr_no !== prNo ? `${prNo} → ${result.pr_no}` : result.pr_no;
         setSubmitMessage(`✓ PR ${finalPrNo} created successfully! Proceeding to approval…`);
         setMessageType('success');
@@ -1037,26 +955,23 @@ function NewEntryPR() {
     setIsSubmitting(false);
   };
 
-  // ─── Step 2: Approval ─────────────────────────────────────────────────────
+  // ─── Step 2: Approval (unchanged) ────────────────────────────────────────
   const handleApprovalDecision = async (decision) => {
     setIsSubmitting(true);
     setSubmitMessage('');
     try {
       const payload = {
-        pr_id:   prId,
-        action:  decision === 'approved' ? 'approve' : 'reject',
-        notes:   decision === 'approved' ? 'Approved' : 'Request disapproved',
+        pr_id: prId,
+        action: decision === 'approved' ? 'approve' : 'reject',
+        notes: decision === 'approved' ? 'Approved' : 'Request disapproved',
         user_id: sessionStorage.getItem('user_id'),
       };
-
       const result = await safePost('/approve_purchase_request.php', payload);
-
       if (decision === 'disapproved') {
         if (result.success) {
           setSubmitMessage('✗ Purchase Request disapproved. Process ended.');
           setMessageType('error');
           setTimeout(() => {
-            // Reset everything back to step 1
             setPrId(null); setPrNo(''); setOffice(''); setDivisionSection('');
             setDateRequested(''); setItemNo(''); setUnit(''); setItemDescription('');
             setQuantity(0); setUnitCost(0); setParticularItems([]);
@@ -1084,26 +999,24 @@ function NewEntryPR() {
     setIsSubmitting(false);
   };
 
-  // ─── Step 3: Delivery Note ────────────────────────────────────────────────
+  // ─── Step 3: Delivery Note (unchanged) ───────────────────────────────────
   const handleDeliveryNote = async (e) => {
     e.preventDefault();
     setSubmitMessage('');
     setIsSubmitting(true);
     try {
       const payload = {
-        pr_id:                prId,
-        delivery_notes:       deliveryNotes || 'No delivery notes provided',
+        pr_id: prId,
+        delivery_notes: deliveryNotes || 'No delivery notes provided',
         actual_delivery_date: poDate || null,
         supplier,
-        si_no:      siNo,
-        dr_no:      drNo,
+        si_no: siNo,
+        dr_no: drNo,
         prepared_by: preparedBy,
-        noted_by:   notedBy,
-        user_id:    sessionStorage.getItem('user_id'),
+        noted_by: notedBy,
+        user_id: sessionStorage.getItem('user_id'),
       };
-
       const result = await safePost('/submit_delivery_notes.php', payload);
-
       if (result.success) {
         setSubmitMessage('✓ Delivery note recorded. Proceeding to inspection…');
         setMessageType('success');
@@ -1119,11 +1032,10 @@ function NewEntryPR() {
     setIsSubmitting(false);
   };
 
-  // ─── Step 4: Inspection ───────────────────────────────────────────────────
+  // ─── Step 4: Inspection (unchanged) ──────────────────────────────────────
   const handleInspection = async (e) => {
     e.preventDefault();
     setSubmitMessage('');
-
     if (!inspectionNotes.trim()) {
       setSubmitMessage('Please add inspection notes before continuing.');
       setMessageType('error');
@@ -1134,31 +1046,28 @@ function NewEntryPR() {
       setMessageType('error');
       return;
     }
-
     setIsSubmitting(true);
     try {
       const payload = {
-        pr_id:              prId,
-        assignment_id:      prId,
-        inspection_notes:   inspectionNotes,
-        condition_report:   inspectionNotes,
-        items:              particularItems,
-        total_amount:       totalAmount,
-        pr_no:              prNo,
+        pr_id: prId,
+        assignment_id: prId,
+        inspection_notes: inspectionNotes,
+        condition_report: inspectionNotes,
+        items: particularItems,
+        total_amount: totalAmount,
+        pr_no: prNo,
         office,
-        division_section:   divisionSection,
-        user_id:            sessionStorage.getItem('user_id'),
-        iac_supplier:       iacSupplier,
-        iac_po_date:        iacPoDate,
+        division_section: divisionSection,
+        user_id: sessionStorage.getItem('user_id'),
+        iac_supplier: iacSupplier,
+        iac_po_date: iacPoDate,
         iac_requisitioning_office: iacRequisitioningOffice,
-        iac_iar_no:         iacIarNo,
-        iac_date:           iacDate,
-        iac_invoice_no:     iacInvoiceNo,
-        iac_invoice_date:   iacInvoiceDate,
+        iac_iar_no: iacIarNo,
+        iac_date: iacDate,
+        iac_invoice_no: iacInvoiceNo,
+        iac_invoice_date: iacInvoiceDate,
       };
-
       const result = await safePost('/submit_inspection.php', payload);
-
       if (result.success) {
         setSubmitMessage('✓ Inspection completed. Determining form type…');
         setMessageType('success');
@@ -1174,7 +1083,7 @@ function NewEntryPR() {
     setIsSubmitting(false);
   };
 
-  // ─── Step 5: Form Selection ───────────────────────────────────────────────
+  // ─── Step 5: Form Selection (unchanged) ──────────────────────────────────
   const handleFormSelection = () => {
     const formType = totalAmount >= AMOUNT_THRESHOLD ? 'ppe' : 'ics';
     const prData = {
@@ -1184,26 +1093,24 @@ function NewEntryPR() {
       name, designation, purpose, certification, items: particularItems,
       supplier, si_no: siNo, po_date: poDate, dr_no: drNo,
       prepared_by: preparedBy, noted_by: notedBy,
-      iac_supplier:               iacSupplier  || supplier,
-      iac_po_date:                iacPoDate    || poDate,
-      iac_requisitioning_office:  iacRequisitioningOffice || office,
-      iac_requisitioning_code:    iacRequisitioningCode,
-      iac_iar_no:                 iacIarNo,
-      iac_date:                   iacDate,
-      iac_invoice_no:             iacInvoiceNo,
-      iac_invoice_date:           iacInvoiceDate,
-      inspection_notes:           inspectionNotes,
+      iac_supplier: iacSupplier || supplier,
+      iac_po_date: iacPoDate || poDate,
+      iac_requisitioning_office: iacRequisitioningOffice || office,
+      iac_requisitioning_code: iacRequisitioningCode,
+      iac_iar_no: iacIarNo,
+      iac_date: iacDate,
+      iac_invoice_no: iacInvoiceNo,
+      iac_invoice_date: iacInvoiceDate,
+      inspection_notes: inspectionNotes,
     };
-
-    sessionStorage.setItem('current_pr_id',    prId);
-    sessionStorage.setItem('current_pr_no',    prNo);
+    sessionStorage.setItem('current_pr_id', prId);
+    sessionStorage.setItem('current_pr_no', prNo);
     sessionStorage.setItem('current_pr_amount', totalAmount);
-    sessionStorage.setItem('form_type',         formType);
-    sessionStorage.setItem('pr_complete_data',  JSON.stringify(prData));
-
+    sessionStorage.setItem('form_type', formType);
+    sessionStorage.setItem('pr_complete_data', JSON.stringify(prData));
     try {
       if (formType === 'ics') navigate('/inventory-form-ics');
-      else                    navigate('/inventory-form-ppe');
+      else navigate('/inventory-form-ppe');
     } catch (err) {
       console.error('Navigation error:', err);
       setSubmitMessage('Failed to open form. Please try again.');
@@ -1211,10 +1118,10 @@ function NewEntryPR() {
     }
   };
 
-  // ─── Navigation ───────────────────────────────────────────────────────────
+  // ─── Navigation back ──────────────────────────────────────────────────────
   const goBack = () => {
     const steps = ['create','approval','delivery_note','inspection','form_selection'];
-    const idx   = steps.indexOf(currentStep);
+    const idx = steps.indexOf(currentStep);
     if (idx > 0) { setCurrentStep(steps[idx - 1]); setSubmitMessage(''); }
   };
 
@@ -1224,53 +1131,34 @@ function NewEntryPR() {
       <style>{css}</style>
       <div className="pr-shell">
         <div className="pr-card">
-
-          {/* ── Header ── */}
           <div className="pr-header">
             <div>
               <div className="pr-header-title">Purchase Request Workflow</div>
               <div className="pr-header-sub">MARINA · Procurement System</div>
             </div>
             <div className="pr-badges">
-              {prNo        ? <span className="pr-badge">PR #{prNo}</span>           : null}
+              {prNo ? <span className="pr-badge">PR #{prNo}</span> : null}
               {totalAmount > 0 ? <span className="pr-badge amount">{fmt(totalAmount)}</span> : null}
             </div>
           </div>
-
-          {/* ── Stepper ── */}
           <Stepper currentStep={currentStep} />
-
-          {/* ── Toast ── */}
           {submitMessage && (
             <div className={`toast ${messageType}`} role="alert">
               {submitMessage}
             </div>
           )}
-
-          {/* ── Body ── */}
           <div className="pr-body">
 
-            {/* ════════════════════════════════════════
-                STEP 1 – Create PR
-            ════════════════════════════════════════ */}
+            {/* STEP 1 – Create PR */}
             {currentStep === 'create' && (
               <form onSubmit={handleCreatePR}>
                 <div className="section-head">Request information</div>
                 <div className="field-grid gap">
                   <Field label="PR No." req>
-                    <input
-                      type="text"
-                      placeholder="e.g. 2024-001"
-                      value={prNo}
-                      onChange={(e) => setPrNo(e.target.value)}
-                    />
+                    <input type="text" placeholder="e.g. 2024-001" value={prNo} onChange={(e) => setPrNo(e.target.value)} />
                   </Field>
                   <Field label="Date requested" req>
-                    <input
-                      type="date"
-                      value={dateRequested}
-                      onChange={(e) => setDateRequested(e.target.value)}
-                    />
+                    <input type="date" value={dateRequested} onChange={(e) => setDateRequested(e.target.value)} />
                   </Field>
                   <Field label="Division / Section" req span2>
                     <select value={divisionSection} onChange={(e) => setDivisionSection(e.target.value)}>
@@ -1289,11 +1177,8 @@ function NewEntryPR() {
                     </select>
                   </Field>
                 </div>
-
                 <hr className="divider" />
                 <div className="section-head">Item details</div>
-
-                {/* Add-item row – INTEGRATION: width bug fix + inline validation */}
                 <div className="gap-sm">
                   <Field label="Item description" req error={rowErrors.particular}>
                     <div className="add-row">
@@ -1309,7 +1194,6 @@ function NewEntryPR() {
                     </div>
                   </Field>
                 </div>
-
                 <div className="field-grid three gap">
                   <Field label="Unit" req error={rowErrors.unit}>
                     <select
@@ -1340,41 +1224,23 @@ function NewEntryPR() {
                     />
                   </Field>
                 </div>
-
                 <div className="field-grid gap">
                   <Field label="Item No.">
-                    <input
-                      type="number"
-                      placeholder="Item No."
-                      value={itemNo}
-                      onChange={(e) => setItemNo(e.target.value)}
-                    />
+                    <input type="number" placeholder="Item No." value={itemNo} onChange={(e) => setItemNo(e.target.value)} />
                   </Field>
                   <Field label="Line total (₱)">
                     <input type="number" value={inputQuantity * inputUnitCost || 0} disabled />
                   </Field>
                 </div>
-
-                <ItemsTable
-                  items={particularItems}
-                  grandTotal={grandTotal}
-                  onRemove={removeItemHandler}
-                />
-
+                <ItemsTable items={particularItems} grandTotal={grandTotal} onRemove={removeItemHandler} />
                 <hr className="divider" />
                 <div className="section-head">Requestor</div>
-
                 <div className="field-grid gap">
                   <Field label="Name" req>
-                    <input
-                      type="text"
-                      placeholder="Full name"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                    />
+                    <input type="text" placeholder="Full name" value={name} onChange={(e) => setName(e.target.value)} />
                   </Field>
                   <Field label="Designation" req>
-                      <select value={designation} onChange={(e) => setDesignation(e.target.value)}>
+                    <select value={designation} onChange={(e) => setDesignation(e.target.value)}>
                       <option value="">Select designation</option>
                       {DESIGNATION_OPTIONS.map(d => (
                         <option key={d} value={d}>{d}</option>
@@ -1391,37 +1257,28 @@ function NewEntryPR() {
                     />
                   </Field>
                 </div>
-
                 <Field label="Certification">
                   <div className="cert-group" style={{marginTop:4}}>
-                    <button
-                      type="button"
-                      className={`cert-btn${certification === 'certified' ? ' active' : ''}`}
-                      onClick={() => setCertification('certified')}
-                    >✓ Funds available</button>
-                    <button
-                      type="button"
-                      className={`cert-btn${certification === 'not-certified' ? ' active' : ''}`}
-                      onClick={() => setCertification('not-certified')}
-                    >✗ No funds available</button>
+                    <button type="button" className={`cert-btn${certification === 'certified' ? ' active' : ''}`} onClick={() => setCertification('certified')}>✓ Funds available</button>
+                    <button type="button" className={`cert-btn${certification === 'not-certified' ? ' active' : ''}`} onClick={() => setCertification('not-certified')}>✗ No funds available</button>
                   </div>
                 </Field>
 
                 <div className="pr-footer">
-                  <button className="btn btn-ghost" type="button" onClick={handleCancelCreate}>
-                    ✕ Cancel
+                  <button type="button" className="btn btn-ghost" onClick={handleDownloadCSV} disabled={!isFormComplete}>
+                    📄 Download PR Form (CSV)
                   </button>
-                  {/* INTEGRATION: spinner + disabled state prevents double-submit */}
-                  <button className="btn btn-primary" type="submit" disabled={isSubmitting}>
-                    {isSubmitting ? <><Spinner /> Creating…</> : 'Create PR →'}
-                  </button>
+                  <div style={{ display: 'flex', gap: '8px' }}>
+                    <button className="btn btn-ghost" type="button" onClick={handleCancelCreate}>✕ Cancel</button>
+                    <button className="btn btn-primary" type="submit" disabled={isSubmitting}>
+                      {isSubmitting ? <><Spinner /> Creating…</> : 'Create PR →'}
+                    </button>
+                  </div>
                 </div>
               </form>
             )}
 
-            {/* ════════════════════════════════════════
-                STEP 2 – Approval
-            ════════════════════════════════════════ */}
+            {/* STEP 2 – Approval (unchanged) */}
             {currentStep === 'approval' && (
               <div>
                 <div className="section-head">Review &amp; approval</div>
@@ -1430,30 +1287,17 @@ function NewEntryPR() {
                   <p><strong>Office</strong>{office}</p>
                   {divisionSection && <p><strong>Division/Section</strong>{divisionSection}</p>}
                 </div>
-
-                {particularItems.length > 0 && (
-                  <ItemsTable items={particularItems} grandTotal={grandTotal} />
-                )}
-
+                {particularItems.length > 0 && <ItemsTable items={particularItems} grandTotal={grandTotal} />}
                 <div className="decision-area">
                   <div className="decision-btns">
-                    <button
-                      className="btn btn-success"
-                      onClick={() => handleApprovalDecision('approved')}
-                      disabled={isSubmitting}
-                    >
+                    <button className="btn btn-success" onClick={() => handleApprovalDecision('approved')} disabled={isSubmitting}>
                       {isSubmitting ? <><Spinner /> Processing…</> : '✓ Approve'}
                     </button>
-                    <button
-                      className="btn btn-danger"
-                      onClick={() => handleApprovalDecision('disapproved')}
-                      disabled={isSubmitting}
-                    >
+                    <button className="btn btn-danger" onClick={() => handleApprovalDecision('disapproved')} disabled={isSubmitting}>
                       {isSubmitting ? <><Spinner /> Processing…</> : '✗ Disapprove'}
                     </button>
                   </div>
                 </div>
-
                 <div className="pr-footer">
                   <button type="button" className="btn btn-ghost" onClick={goBack} disabled={isSubmitting}>← Back</button>
                   <div />
@@ -1461,9 +1305,7 @@ function NewEntryPR() {
               </div>
             )}
 
-            {/* ════════════════════════════════════════
-                STEP 3 – Delivery Note
-            ════════════════════════════════════════ */}
+            {/* STEP 3 – Delivery Note (unchanged) */}
             {currentStep === 'delivery_note' && (
               <form onSubmit={handleDeliveryNote}>
                 <div className="section-head">Delivery information</div>
@@ -1472,112 +1314,44 @@ function NewEntryPR() {
                   <p><strong>Office</strong>{office}</p>
                   <p><strong>Division/Section</strong>{divisionSection}</p>
                 </div>
-
                 <div className="field-grid gap">
-                  <Field label="Supplier" req>
-                    <input
-                      type="text"
-                      placeholder="Supplier name"
-                      value={supplier}
-                      onChange={(e) => setSupplier(e.target.value)}
-                    />
-                  </Field>
-                  <Field label="PR No.">
-                    <input type="text" value={prNo} disabled />
-                  </Field>
-                  <Field label="SI No.">
-                    <input type="text" placeholder="SI No." value={siNo} onChange={(e) => setSiNo(e.target.value)} />
-                  </Field>
-                  <Field label="PO Date">
-                    <input type="date" value={poDate} onChange={(e) => setPoDate(e.target.value)} />
-                  </Field>
-                  <Field label="DR No.">
-                    <input type="text" placeholder="DR No." value={drNo} onChange={(e) => setDrNo(e.target.value)} />
-                  </Field>
+                  <Field label="Supplier" req><input type="text" placeholder="Supplier name" value={supplier} onChange={(e) => setSupplier(e.target.value)} /></Field>
+                  <Field label="PR No."><input type="text" value={prNo} disabled /></Field>
+                  <Field label="SI No."><input type="text" placeholder="SI No." value={siNo} onChange={(e) => setSiNo(e.target.value)} /></Field>
+                  <Field label="PO Date"><input type="date" value={poDate} onChange={(e) => setPoDate(e.target.value)} /></Field>
+                  <Field label="DR No."><input type="text" placeholder="DR No." value={drNo} onChange={(e) => setDrNo(e.target.value)} /></Field>
                 </div>
-
                 <hr className="divider" />
                 <div className="section-head">Particulars</div>
-
-                {/* INTEGRATION: width bug fix applied here too */}
                 <div className="gap-sm">
                   <Field label="Item particular" req error={rowErrors.particular}>
                     <div className="add-row">
-                      <input
-                        type="text"
-                        className={rowErrors.particular ? 'has-error' : ''}
-                        value={inputParticular}
-                        onChange={(e) => setInputParticular(e.target.value)}
-                        onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), addItemHandler())}
-                        placeholder="Item particulars (e.g., Office Chair)"
-                      />
+                      <input type="text" className={rowErrors.particular ? 'has-error' : ''} value={inputParticular} onChange={(e) => setInputParticular(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), addItemHandler())} placeholder="Item particulars (e.g., Office Chair)" />
                       <button type="button" className="btn-add" onClick={addItemHandler} title="Add item">+</button>
                     </div>
                   </Field>
                 </div>
-
                 <div className="field-grid three gap">
-                  <Field label="Unit" error={rowErrors.unit}>
-                    <select
-                      className={rowErrors.unit ? 'has-error' : ''}
-                      value={inputUnit}
-                      onChange={(e) => setInputUnit(e.target.value)}
-                    >
-                      <option value="">Select unit</option>
-                      {UNIT_OPTIONS.map(u => <option key={u} value={u}>{u}</option>)}
-                    </select>
-                  </Field>
-                  <Field label="Quantity" error={rowErrors.quantity}>
-                    <input
-                      type="number"
-                      className={rowErrors.quantity ? 'has-error' : ''}
-                      value={inputQuantity || ''}
-                      onChange={(e) => setInputQuantity(e.target.value ? parseFloat(e.target.value) : 0)}
-                      placeholder="0"
-                    />
-                  </Field>
-                  <Field label="Unit cost (₱)" error={rowErrors.unitCost}>
-                    <input
-                      type="number"
-                      className={rowErrors.unitCost ? 'has-error' : ''}
-                      value={inputUnitCost || ''}
-                      onChange={(e) => setInputUnitCost(e.target.value ? parseFloat(e.target.value) : 0)}
-                      placeholder="0.00"
-                      step="0.01"
-                    />
-                  </Field>
-                  <Field label="Amount (₱)">
-                    <input type="number" value={inputQuantity * inputUnitCost || 0} disabled />
-                  </Field>
-                  <Field label="Grand total (₱)" span2>
-                    <input type="number" value={grandTotal} disabled />
-                  </Field>
+                  <Field label="Unit" error={rowErrors.unit}><select className={rowErrors.unit ? 'has-error' : ''} value={inputUnit} onChange={(e) => setInputUnit(e.target.value)}><option value="">Select unit</option>{UNIT_OPTIONS.map(u => <option key={u} value={u}>{u}</option>)}</select></Field>
+                  <Field label="Quantity" error={rowErrors.quantity}><input type="number" className={rowErrors.quantity ? 'has-error' : ''} value={inputQuantity || ''} onChange={(e) => setInputQuantity(e.target.value ? parseFloat(e.target.value) : 0)} placeholder="0" /></Field>
+                  <Field label="Unit cost (₱)" error={rowErrors.unitCost}><input type="number" className={rowErrors.unitCost ? 'has-error' : ''} value={inputUnitCost || ''} onChange={(e) => setInputUnitCost(e.target.value ? parseFloat(e.target.value) : 0)} placeholder="0.00" step="0.01" /></Field>
+                  <Field label="Amount (₱)"><input type="number" value={inputQuantity * inputUnitCost || 0} disabled /></Field>
+                  <Field label="Grand total (₱)" span2><input type="number" value={grandTotal} disabled /></Field>
                 </div>
-
                 <ItemsTable items={particularItems} grandTotal={grandTotal} onRemove={removeItemHandler} />
-
                 <hr className="divider" />
                 <div className="field-grid gap">
-                  <Field label="Prepared by">
-                    <input type="text" value={preparedBy} onChange={(e) => setPreparedBy(e.target.value)} />
-                  </Field>
-                  <Field label="Noted by">
-                    <input type="text" value={notedBy} onChange={(e) => setNotedBy(e.target.value)} />
-                  </Field>
+                  <Field label="Prepared by"><input type="text" value={preparedBy} onChange={(e) => setPreparedBy(e.target.value)} /></Field>
+                  <Field label="Noted by"><input type="text" value={notedBy} onChange={(e) => setNotedBy(e.target.value)} /></Field>
                 </div>
-
                 <div className="pr-footer">
                   <button type="button" className="btn btn-ghost" onClick={goBack} disabled={isSubmitting}>← Back</button>
-                  <button className="btn btn-primary" type="submit" disabled={isSubmitting}>
-                    {isSubmitting ? <><Spinner /> Saving…</> : 'Next: Inspection →'}
-                  </button>
+                  <button className="btn btn-primary" type="submit" disabled={isSubmitting}>{isSubmitting ? <><Spinner /> Saving…</> : 'Next: Inspection →'}</button>
                 </div>
               </form>
             )}
 
-            {/* ════════════════════════════════════════
-                STEP 4 – Inspection
-            ════════════════════════════════════════ */}
+            {/* STEP 4 – Inspection (unchanged) */}
             {currentStep === 'inspection' && (
               <form onSubmit={handleInspection}>
                 <div className="section-head">PR summary</div>
@@ -1587,116 +1361,76 @@ function NewEntryPR() {
                   <p><strong>Division/Section</strong>{divisionSection}</p>
                   <p><strong>Total amount</strong><strong style={{color:'var(--green)'}}>{fmt(totalAmount)}</strong></p>
                 </div>
-
                 {(supplier || siNo || poDate || drNo) && (
                   <div className="info-card blue gap">
                     <h4>Delivery information</h4>
                     {supplier && <p><strong>Supplier</strong>{supplier}</p>}
-                    {siNo     && <p><strong>SI No.</strong>{siNo}</p>}
-                    {poDate   && <p><strong>PO Date</strong>{poDate}</p>}
-                    {drNo     && <p><strong>DR No.</strong>{drNo}</p>}
+                    {siNo && <p><strong>SI No.</strong>{siNo}</p>}
+                    {poDate && <p><strong>PO Date</strong>{poDate}</p>}
+                    {drNo && <p><strong>DR No.</strong>{drNo}</p>}
                   </div>
                 )}
-
                 <div className="section-head">Inspection document details</div>
                 <div className="field-grid gap">
                   {[
-                    { label:'Supplier',      req:true,  type:'text', value:iacSupplier,   setter:setIacSupplier,   placeholder:'Supplier name' },
-                    { label:'P.O. date',     req:true,  type:'date', value:iacPoDate,     setter:setIacPoDate },
-                    { label:'IAR No.',       req:true,  type:'text', value:iacIarNo,      setter:setIacIarNo,      placeholder:'YYYY-MM-ENTRY#' },
-                    { label:'Date',          req:true,  type:'date', value:iacDate,       setter:setIacDate },
-                    { label:'Invoice No.',   req:true,  type:'text', value:iacInvoiceNo,  setter:setIacInvoiceNo },
-                    { label:'Invoice date',  req:true,  type:'date', value:iacInvoiceDate,setter:setIacInvoiceDate },
+                    { label:'Supplier', req:true, type:'text', value:iacSupplier, setter:setIacSupplier, placeholder:'Supplier name' },
+                    { label:'P.O. date', req:true, type:'date', value:iacPoDate, setter:setIacPoDate },
+                    { label:'IAR No.', req:true, type:'text', value:iacIarNo, setter:setIacIarNo, placeholder:'YYYY-MM-ENTRY#' },
+                    { label:'Date', req:true, type:'date', value:iacDate, setter:setIacDate },
+                    { label:'Invoice No.', req:true, type:'text', value:iacInvoiceNo, setter:setIacInvoiceNo },
+                    { label:'Invoice date', req:true, type:'date', value:iacInvoiceDate, setter:setIacInvoiceDate },
                   ].map(({ label, req, type, value, setter, placeholder }) => (
                     <Field key={label} label={label} req={req}>
-                      <input
-                        type={type}
-                        value={value}
-                        onChange={(e) => setter(e.target.value)}
-                        placeholder={placeholder || ''}
-                      />
+                      <input type={type} value={value} onChange={(e) => setter(e.target.value)} placeholder={placeholder || ''} />
                     </Field>
                   ))}
-
                   <Field label="Requisitioning office" req span2>
-                    <select
-                      value={iacRequisitioningOffice}
-                      onChange={(e) => setIacRequisitioningOffice(e.target.value)}
-                    >
+                    <select value={iacRequisitioningOffice} onChange={(e) => setIacRequisitioningOffice(e.target.value)}>
                       <option value="">Select office</option>
                       {IAC_OFFICES.map(o => <option key={o} value={o}>{o}</option>)}
                     </select>
                   </Field>
                 </div>
-
                 <div className="section-head">Inspection notes</div>
-                <div className="gap">
-                  <textarea
-                    value={inspectionNotes}
-                    onChange={(e) => setInspectionNotes(e.target.value)}
-                    rows={4}
-                    required
-                    placeholder="Item condition, quantity verified, quality assessment…"
-                  />
-                </div>
-
+                <div className="gap"><textarea value={inspectionNotes} onChange={(e) => setInspectionNotes(e.target.value)} rows={4} required placeholder="Item condition, quantity verified, quality assessment…" /></div>
                 <div className="section-head">Items for inspection</div>
                 {particularItems.length > 0 ? (
-                  <ItemsTable
-                    items={particularItems}
-                    grandTotal={totalAmount}
-                    showRemarks
-                    onRemarkChange={setParticularItems}
-                  />
+                  <ItemsTable items={particularItems} grandTotal={totalAmount} showRemarks onRemarkChange={setParticularItems} />
                 ) : (
-                  <div className="info-card" style={{textAlign:'center',color:'var(--text-3)',padding:'2rem'}}>
-                    No items found. Go back to Step 1 to add items.
-                  </div>
+                  <div className="info-card" style={{textAlign:'center',color:'var(--text-3)',padding:'2rem'}}>No items found. Go back to Step 1 to add items.</div>
                 )}
-
                 <div className="pr-footer">
                   <button type="button" className="btn btn-ghost" onClick={goBack} disabled={isSubmitting}>← Back</button>
-                  <button className="btn btn-primary" type="submit" disabled={isSubmitting}>
-                    {isSubmitting ? <><Spinner /> Saving…</> : 'Complete inspection →'}
-                  </button>
+                  <button className="btn btn-primary" type="submit" disabled={isSubmitting}>{isSubmitting ? <><Spinner /> Saving…</> : 'Complete inspection →'}</button>
                 </div>
               </form>
             )}
 
-            {/* ════════════════════════════════════════
-                STEP 5 – Form Selection
-            ════════════════════════════════════════ */}
+            {/* STEP 5 – Form Selection (unchanged) */}
             {currentStep === 'form_selection' && (
               <div>
                 <div className="section-head">Inventory form selection</div>
-
                 <div className="info-card gap">
                   <h4>Purchase request summary</h4>
                   <p><strong>PR No.</strong>{prNo}</p>
                   <p><strong>Office</strong>{office}</p>
                   {divisionSection && <p><strong>Division/Section</strong>{divisionSection}</p>}
                 </div>
-
-                {particularItems.length > 0 && (
-                  <ItemsTable items={particularItems} grandTotal={grandTotal} />
-                )}
-
+                {particularItems.length > 0 && <ItemsTable items={particularItems} grandTotal={grandTotal} />}
                 {supplier && (
                   <div className="info-card blue gap" style={{marginTop:14}}>
                     <h4>Delivery information</h4>
                     <p><strong>Supplier</strong>{supplier}</p>
-                    {siNo   && <p><strong>SI No.</strong>{siNo}</p>}
+                    {siNo && <p><strong>SI No.</strong>{siNo}</p>}
                     {poDate && <p><strong>PO Date</strong>{poDate}</p>}
-                    {drNo   && <p><strong>DR No.</strong>{drNo}</p>}
+                    {drNo && <p><strong>DR No.</strong>{drNo}</p>}
                   </div>
                 )}
-
                 <div style={{margin:'18px 0 8px',fontSize:13,color:'var(--text-2)'}}>
                   Amount: <strong style={{fontFamily:'var(--mono)'}}>{fmt(totalAmount)}</strong>
                   <span style={{margin:'0 6px',color:'var(--text-3)'}}>·</span>
                   Threshold: <strong style={{fontFamily:'var(--mono)'}}>₱50,000.00</strong>
                 </div>
-
                 <div className="form-select-options">
                   <div className={`form-opt${isICS ? ' active-ics' : ''}`}>
                     <h4 style={{color: isICS ? 'var(--accent)' : 'var(--text-3)'}}>ICS</h4>
@@ -1709,24 +1443,19 @@ function NewEntryPR() {
                     {!isICS && <p style={{marginTop:6,fontWeight:600,color:'var(--amber)'}}>← Selected</p>}
                   </div>
                 </div>
-
                 <div className="pr-footer">
                   <button type="button" className="btn btn-ghost" onClick={goBack}>← Back</button>
-                  <button className="btn btn-primary" onClick={handleFormSelection}>
-                    Proceed to {isICS ? 'ICS Form' : 'PPE Form'} →
-                  </button>
+                  <button className="btn btn-primary" onClick={handleFormSelection}>Proceed to {isICS ? 'ICS Form' : 'PPE Form'} →</button>
                 </div>
               </div>
             )}
-
-          </div>{/* end .pr-body */}
-        </div>{/* end .pr-card */}
-      </div>{/* end .pr-shell */}
+          </div>
+        </div>
+      </div>
     </>
   );
 }
 
-// ─── Named export kept for backward compatibility ─────────────────────────────
 export const PurchaseRequestData = {
   unitCost: 0,
   quantity: 1,

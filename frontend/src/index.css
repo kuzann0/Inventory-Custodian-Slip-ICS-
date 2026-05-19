@@ -71,5 +71,26 @@ body {
   }
 }
 
+button .download-button {
+      background: none;
+      border: none;
+      width: 100px;
+      height: 100px;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+}
+
+
+.download-icon {
+      border: none;
+      width: 100px;
+      height: 100px;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+}
+.download-icon:hover {
+    transform: scale(1.2);
+  }
+
 
 

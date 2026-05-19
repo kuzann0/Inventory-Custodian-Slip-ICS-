@@ -4,9 +4,11 @@
   display: flex;
   flex-direction: column;
   height: 100vh;
+  width: 100%;
+  box-sizing: border-box;
   overflow: hidden;
-  background: var(--gradient-primary-subtle);
-  transition: margin-left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  background: var(--color-background);
+  transition: margin-left 280ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .mainContent.collapsed {
@@ -17,15 +19,40 @@
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
-  padding: var(--spacing-5xl) var(--spacing-lg);
-  max-width: var(--container-max-width);
+  padding: var(--spacing-2xl) var(--spacing-xl);
+  max-width: 100%;
   width: 100%;
-  margin: 0 auto;
-  background-color: var(--color-gray-150);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-sizing: border-box;
+  margin: 0;
+  background-color: var(--color-background);
+  transition: all 280ms cubic-bezier(0.4, 0, 0.2, 1);
+  -webkit-overflow-scrolling: touch;
+  font-family: var(--font-family-primary);
 }
 
-/* Tablet Responsive */
+/* ─── Scrollbar ─── */
+.contentArea::-webkit-scrollbar {
+  width: 6px;
+}
+
+.contentArea::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.contentArea::-webkit-scrollbar-thumb {
+  background: var(--color-gray-300);
+  border-radius: var(--radius-full);
+}
+
+.contentArea::-webkit-scrollbar-thumb:hover {
+  background: var(--color-gray-400);
+}
+
+/* ════════════════════════════════════════════════════════════════
+   RESPONSIVE DESIGN — DESKTOP-FIRST
+   ════════════════════════════════════════════════════════════════ */
+
+/* ─── Tablet: ≤1024px ─── */
 @media (max-width: 1024px) {
   .mainContent {
     margin-left: 110px;
@@ -34,9 +61,13 @@
   .mainContent.collapsed {
     margin-left: 80px;
   }
+
+  .contentArea {
+    padding: var(--spacing-2xl) var(--spacing-lg);
+  }
 }
 
-/* Mobile Responsive */
+/* ─── Mobile: ≤768px ─── */
 @media (max-width: 768px) {
   .mainContent {
     margin-left: 0;
@@ -45,33 +76,15 @@
   }
 
   .contentArea {
-    padding: 20px 15px;
-    margin-top: 60px; /* Space for mobile header */
+    padding: var(--spacing-xl) var(--spacing-lg);
+    margin-top: 60px;
   }
 }
 
-/* Small Mobile */
+/* ─── Small Mobile: ≤480px ─── */
 @media (max-width: 480px) {
   .contentArea {
-    padding: 15px 10px;
-    margin-top: 50px;
+    padding: var(--spacing-lg) var(--spacing-md);
+    margin-top: 52px;
   }
-}
-
-/* Scrollbar customization for content area */
-.contentArea::-webkit-scrollbar {
-  width: 10px;
-}
-
-.contentArea::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.contentArea::-webkit-scrollbar-thumb {
-  background: var(--color-gray-400);
-  border-radius: var(--radius-full);
-}
-
-.contentArea::-webkit-scrollbar-thumb:hover {
-  background: var(--color-gray-600);
 }

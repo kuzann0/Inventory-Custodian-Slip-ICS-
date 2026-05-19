@@ -181,6 +181,38 @@ try {
         }
     }
 
+        // ------------------------------------------------------------
+    // Update entries table with ICS data
+    // ------------------------------------------------------------
+    if ($pr_id) {
+        $find_entry = $conn->prepare("SELECT entry_id FROM workflow_status WHERE pr_id = ? LIMIT 1");
+        if ($find_entry) {
+            $find_entry->bind_param('i', $pr_id);
+            $find_entry->execute();
+            $res_entry = $find_entry->get_result();
+            if ($entry_row = $res_entry->fetch_assoc()) {
+                $entry_id = $entry_row['entry_id'];
+                
+                $update_entry = $conn->prepare("
+                    UPDATE entries 
+                    SET InventoryItemNo = ?, 
+                        EstimatedUsefulLife = ?, 
+                        FormType = 'ICS'
+                    WHERE order_id = ?
+                ");
+                if ($update_entry) {
+                    $inventory_no = $data['property_no'] ?? '';
+                    $est_life = $data['estimated_useful_life'] ?? '';
+                    $update_entry->bind_param('ssi', $inventory_no, $est_life, $entry_id);
+                    $update_entry->execute();
+                    $update_entry->close();
+                }
+            }
+            $find_entry->close();
+        }
+    }
+
+
     $conn->close();
 
     // Return success response

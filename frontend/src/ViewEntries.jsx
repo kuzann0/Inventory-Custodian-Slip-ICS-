@@ -124,38 +124,59 @@ function ViewEntries() {
     setExpandedRows(newSet);
   };
 
-  const handleExport = () => {
-    const columns = [
-      'order_id', 'Item', 'Quantity', 'Unit', 'UnitCost', 'TotalCost',
-      'SerialNo', 'InventoryItemNo', 'DateAcquired', 'Location', 'EstimatedUsefulLife',
-      'Description', 'ApprovalStatus', 'approved_by_name', 'ApprovedDate',
-      'DeliveryStatus', 'DeliveryDate', 'InspectionStatus', 'inspected_by_name',
-      'FormType', 'pr_number', 'WorkflowStep'
-    ];
-    const csvRows = [
-      columns.join(','),
-      ...sortedEntries.map(entry =>
-        columns.map(col => {
-          const val = entry[col];
-          if (val === null || val === undefined) return '—';
-          if (typeof val === 'string' && (val.includes(',') || val.includes('"') || val.includes('\n'))) {
-            return `"${val.replace(/"/g, '""')}"`;
-          }
-          return val;
-        }).join(',')
-      )
-    ];
-    const blob = new Blob([csvRows.join('\n')], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = `entries_${new Date().toISOString().split('T')[0]}.csv`;
-    link.click();
-    URL.revokeObjectURL(link.href);
-  };
+  const handlecsv = () => {
+  const columns = [
+    'order_id', 'Item', 'Quantity', 'Unit', 'UnitCost', 'TotalCost',
+    'SerialNo', 'InventoryItemNo', 'DateAcquired', 'Location', 'EstimatedUsefulLife',
+    'Description', 'ApprovalStatus', 'approved_by_name', 'ApprovedDate',
+    'DeliveryStatus', 'DeliveryDate', 'InspectionStatus', 'inspected_by_name',
+    'FormType', 'pr_number', 'WorkflowStep'
+  ];
 
+  const csvRows = [];
+  // Add UTF-8 BOM (EF BB BF)
+  csvRows.push('\uFEFF' + columns.join(','));
+
+  sortedEntries.forEach(entry => {
+    const row = columns.map(col => {
+      let val = entry[col];
+      if (val === null || val === undefined) return '';
+      if (val === '—') return '';
+
+      // Convert objects (like FormData) to JSON string
+      if (typeof val === 'object' && val !== null) {
+        val = JSON.stringify(val);
+      }
+
+      // Convert date strings to US format
+      const dateColumns = ['DateAcquired', 'ApprovedDate', 'DeliveryDate', 'InspectionDate', 'FormSubmitDate'];
+      if (dateColumns.includes(col) && typeof val === 'string' && val.match(/^\d{4}-\d{2}-\d{2}/)) {
+        val = new Date(val).toLocaleDateString('en-US');
+      }
+
+      // CSV escaping
+      if (typeof val === 'string' && (val.includes(',') || val.includes('"') || val.includes('\n'))) {
+        return `"${val.replace(/"/g, '""')}"`;
+      }
+      return val;
+    }).join(',');
+    csvRows.push(row);
+  });
+
+  const blob = new Blob([csvRows.join('\n')], { type: 'text/csv;charset=utf-8;' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = `entries_${new Date().toISOString().split('T')[0]}.csv`;
+  link.click();
+  URL.revokeObjectURL(link.href);  
+};
+
+// Sort icon component
   const SortIcon = ({ column }) => {
-    if (sortConfig.key !== column) return <span className={styles.sortIcon}>↕</span>;
-    return sortConfig.direction === "asc" ? <span className={styles.sortIcon}>↑</span> : <span className={styles.sortIcon}>↓</span>;
+  if (sortConfig.key !== column) return <span className={styles.sortIcon}>↕</span>;
+  return sortConfig.direction === "asc" 
+    ? <span className={styles.sortIcon}>↑</span> 
+    : <span className={styles.sortIcon}>↓</span>;
   };
 
   // ─── Render ──────────────────────────────────────────────────────────────
@@ -173,7 +194,7 @@ function ViewEntries() {
               <button className={styles.actionBtn} onClick={fetchEntries} title="Refresh">
                 <span className={styles.btnIcon}>↻</span> Refresh
               </button>
-              <button className={styles.actionBtn} onClick={handleExport} title="Export CSV">
+              <button className={styles.actionBtn} onClick={handlecsv} title="Export CSV">
                 <span className={styles.btnIcon}>⬇</span> Export
               </button>
             </div>
