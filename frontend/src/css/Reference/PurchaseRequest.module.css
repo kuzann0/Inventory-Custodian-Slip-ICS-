@@ -1,0 +1,163 @@
+:root {
+     --primary-color: var(--color-primary);
+     --secondary-color: var(--color-primary-alpha-10);
+     --default-color: var(--color-text-primary);
+     --approved-color: var(--color-approved);
+     --rejected-color: var(--color-rejected);
+}
+
+input {
+    font-size: 0.9rem;
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: var(--letter-spacing-wide);
+    color: var(--color-primary);
+    border: 2px solid var(--color-primary-alpha-10);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-base);
+    width: 300px;
+}
+
+input:focus {
+    outline: none;
+    border: 2px solid var(--color-primary-alpha-10);
+}
+
+.mainContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    width: 100%;
+    height: auto;
+    background-color: var(--color-background);
+}
+
+.foreGround {
+    background: var(--color-surface);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-base);
+    padding: var(--spacing-xl);
+    width: 90%;
+    max-width: 800px;
+    height: auto;
+}
+
+.mainWrapper {
+    width: 100%;
+}
+
+.content {
+    padding: var(--spacing-xl);
+}
+
+.progressContainer {
+    margin-bottom: var(--spacing-xl);
+}
+
+.progressLine {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-lg);
+}
+
+.element {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: var(--color-gray-300);
+}
+
+.element:nth-child(1) {
+    background-color: var(--primary-color);
+}
+
+.header {
+    text-align: center;
+    margin-bottom: var(--spacing-xl);
+}
+
+.header h1 {
+    color: var(--color-primary);
+    margin: 0;
+}
+
+.statusContainer {
+    color: var(--approved-color);
+    font-weight: bold;
+}
+
+.formContainer {
+    margin-bottom: 20px;
+}
+
+.formContainer form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xl);
+}
+
+.formContainer span {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+.formContainer label {
+    font-weight: var(--font-weight-bold);
+    color: var(--color-primary);
+}
+
+.formContainer select {
+    font-size: 0.9rem;
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: var(--letter-spacing-wide);
+    color: var(--color-primary);
+    border: 2px solid var(--color-primary-alpha-10);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-base);
+    width: 300px;
+}
+
+.buttonContainer {
+    text-align: center;
+}
+
+.buttonWrapper {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-lg);
+}
+
+.nextBtn {
+    background-color: var(--color-primary);
+    color: white;
+    border: none;
+    border-radius: var(--radius-md);
+    padding: var(--spacing-base) var(--spacing-lg);
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.nextBtn:hover {
+    background-color: var(--color-primary-light);
+}
+
+.message {
+    margin-top: var(--spacing-lg);
+    padding: var(--spacing-lg);
+    border-radius: var(--radius-base);
+    text-align: center;
+    font-weight: var(--font-weight-semibold);
+}
+
+.message.success {
+    background-color: var(--color-success-bg);
+    color: var(--color-success-text);
+    border: 1px solid var(--color-success);
+}
+
+.message.error {
+    background-color: var(--color-danger-bg);
+    color: var(--color-danger-text);
+    border: 1px solid var(--color-danger);
+}

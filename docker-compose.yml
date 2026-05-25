@@ -1,0 +1,147 @@
+# version: "3.8"
+
+services:
+  # ============================================================================
+  # DATABASE SERVICE
+  # ============================================================================
+  db:
+    image: mysql:5.7
+    container_name: ics-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: my_app_db
+      MYSQL_CHARSET: utf8mb4
+      MYSQL_COLLATION: utf8mb4_unicode_ci
+    ports:
+      - "3307:3306"
+    volumes:
+      # Persist MySQL data across container restarts
+      - mysql_data:/var/lib/mysql
+      # Initialize database with complete fixed backup on first run
+      - ./backend/database/COMPLETE_DATABASE_FIX_20260514.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - ics-network
+
+  # ============================================================================
+  # DATABASE MANAGEMENT INTERFACE (phpMyAdmin)
+  # ============================================================================
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:5.2
+    container_name: ics-phpmyadmin
+    restart: unless-stopped
+    environment:
+      PMA_HOST: db
+      PMA_USER: root
+      PMA_PASSWORD: rootpassword
+      MYSQL_ROOT_PASSWORD: rootpassword
+      PMA_ABSOLUTE_URI: http://localhost:8086/
+    ports:
+      - "8086:80"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - ics-network
+
+  # ============================================================================
+  # BACKEND API SERVICE (PHP/Apache)
+  # ============================================================================
+  backend:
+    image: v20_backend:3.0.0
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: ics-backend
+    restart: unless-stopped
+    ports:
+      - "3001:80"
+    volumes:
+      # Mount backend code for live development
+      - ./backend:/var/www/html
+    environment:
+      # Pass database credentials to backend via environment
+      MYSQL_HOST: db
+      MYSQL_USER: root
+      MYSQL_PASSWORD: rootpassword
+      MYSQL_DATABASE: my_app_db
+      MYSQL_PORT: 3306
+      
+      # ====================================================================
+      # MAIL CONFIGURATION (Optional - for email functionality)
+      # ====================================================================
+      # Email Mode: 'online' or 'offline'
+      MAIL_MODE: ${MAIL_MODE:-offline}
+      
+      # Gmail SMTP Configuration (use .env file to set values)
+      MAIL_HOST: ${MAIL_HOST:-smtp.gmail.com}
+      MAIL_PORT: ${MAIL_PORT:-587}
+      MAIL_USERNAME: ${MAIL_USERNAME:-.}
+      MAIL_PASSWORD: ${MAIL_PASSWORD:-.}
+      MAIL_FROM_ADDRESS: ${MAIL_FROM_ADDRESS:-noreply@ics-system.local}
+      MAIL_FROM_NAME: ${MAIL_FROM_NAME:-ICS System}
+      MAIL_ENCRYPTION: ${MAIL_ENCRYPTION:-tls}
+      MAIL_VERIFY_SSL: ${MAIL_VERIFY_SSL:-false}
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/connect.php"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    networks:
+      - ics-network
+
+  # ============================================================================
+  # FRONTEND SERVICE (React + Vite Development Server)
+  # ============================================================================
+  frontend:
+    image: v20_frontend:3.0.0
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: ics-frontend
+    restart: unless-stopped
+    ports:
+      # Port mapping: host port 3000 → container Vite port 5173
+      # Access at: http://127.0.0.1:3000
+      - "3000:5173"
+    volumes:
+      # Preserve node_modules in container (don't sync from host)
+      - /app/node_modules
+      # NOTE: Removed ./frontend:/app volume mount - serving from image instead
+      # This ensures Docker uses the latest built image, not host filesystem
+    environment:
+      # Frontend environment variables
+      # Use localhost:3001 for browser access (HMR is 3000, but API is 3001)
+      VITE_API_URL: http://localhost:3001
+      VITE_HMR_HOST: localhost
+      VITE_HMR_PORT: 3000
+      VITE_HMR_PROTOCOL: ws
+      VITE_APP_NAME: ICS System
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - ics-network
+# ============================================================================
+# NAMED VOLUMES (Persistent Storage)
+# ============================================================================
+volumes:
+  mysql_data:
+    driver: local
+
+# ============================================================================
+# CUSTOM NETWORK (Enables service-to-service communication)
+# ============================================================================
+networks:
+  ics-network:
+    driver: bridge

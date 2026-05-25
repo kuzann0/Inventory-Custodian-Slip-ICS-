@@ -1,0 +1,180 @@
+* {
+  font-family: var(--font-family-primary);
+}
+
+body, html {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: url('../assets/tempBG.gif') no-repeat center center fixed;
+  background-size: cover;
+  background-blend-mode: soft-light;
+}
+
+/* ─── Wrapper ─── */
+.loginWrapper {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* ─── Input Overrides ─── */
+input {
+  padding: var(--spacing-md) var(--spacing-lg);
+  letter-spacing: var(--letter-spacing-normal);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-regular);
+  margin: var(--spacing-sm) 0;
+  width: 100%;
+  border: 1.5px solid rgba(5, 27, 81, 0.15);
+  border-radius: var(--radius-input);
+  color: var(--color-primary);
+  background-color: rgba(255, 255, 255, 0.95);
+  transition: var(--transition-input);
+  box-sizing: border-box;
+}
+
+input:hover {
+  border-color: rgba(25, 62, 153, 0.35);
+}
+
+input:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  background-color: #fff;
+  box-shadow: 0 0 0 3px rgba(25, 62, 153, 0.12);
+}
+
+/* ─── Button Override ─── */
+button {
+  padding: var(--spacing-md) var(--spacing-lg);
+  margin: var(--spacing-xl) 0 0 0;
+  border: none;
+  border-radius: var(--radius-button);
+  background: var(--gradient-primary);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  width: 100%;
+  text-align: center;
+  cursor: pointer;
+  letter-spacing: var(--letter-spacing-wide);
+  transition: var(--transition-button);
+  box-sizing: border-box;
+  box-shadow: 0 4px 14px rgba(5, 27, 81, 0.30);
+}
+
+button:hover {
+  background: var(--gradient-primary-hover);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-button-hover);
+}
+
+button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(5, 27, 81, 0.22);
+}
+
+button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* ─── Login Header ─── */
+.loginHeader {
+  color: var(--color-primary);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-4xl);
+  margin-bottom: var(--spacing-2xl);
+  text-align: center;
+  letter-spacing: var(--letter-spacing-tight);
+  line-height: 1.15;
+}
+
+/* ─── Main Container (Card) ─── */
+.mainContainer {
+  border-radius: var(--radius-2xl);
+  box-shadow: 0 32px 80px rgba(5, 27, 81, 0.22), 0 8px 24px rgba(0,0,0,0.10);
+  background-color: white;
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  grid-template-rows: 1fr;
+  width: 100%;
+  max-width: 880px;
+  height: 460px;
+  overflow: hidden;
+  transition: box-shadow 0.3s ease;
+}
+
+.mainContainer:hover {
+  box-shadow: 0 40px 100px rgba(5, 27, 81, 0.28), 0 10px 28px rgba(0,0,0,0.12);
+}
+
+/* ─── Image Panel ─── */
+.imgContainer {
+  background-image: url('../assets/MainViewport.gif');
+  background-size: cover;
+  background-position: center;
+  border-top-left-radius: var(--radius-2xl);
+  border-bottom-left-radius: var(--radius-2xl);
+  width: 100%;
+  z-index: 2;
+  background-color: var(--color-primary);
+  position: relative;
+}
+
+.imgContainer::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(5,27,81,0.12) 0%, rgba(5,27,81,0.05) 100%);
+}
+
+/* ─── Login Panel ─── */
+.loginPanel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  background-color: #ffffff;
+  border-radius: 0 var(--radius-2xl) var(--radius-2xl) 0;
+  padding: var(--spacing-5xl) var(--spacing-5xl);
+}
+
+.loginPanel form {
+  width: 100%;
+  max-width: 280px;
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 768px) {
+  .mainContainer {
+    grid-template-columns: 1fr;
+    height: auto;
+    max-width: 96%;
+    margin: var(--spacing-lg);
+  }
+  .imgContainer { display: none; }
+  .loginPanel {
+    border-radius: var(--radius-2xl);
+    padding: var(--spacing-5xl) var(--spacing-2xl);
+  }
+}
+
+@media (max-width: 480px) {
+  .loginPanel { padding: var(--spacing-xl) var(--spacing-lg); }
+  .loginPanel form { max-width: 100%; }
+  .loginHeader { font-size: var(--font-size-3xl); }
+}
