@@ -1,0 +1,14 @@
+RewriteEngine On
+
+# Handle API routes - don't rewrite these
+RewriteCond %{REQUEST_URI} ^/.*\.php$ [NC]
+RewriteRule ^ - [L]
+
+# Handle static assets - don't rewrite these
+RewriteCond %{REQUEST_URI} ^/assets/ [NC]
+RewriteRule ^ - [L]
+
+# Handle all other routes - serve index.html for React Router
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.html [L]
