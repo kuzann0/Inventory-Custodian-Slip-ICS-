@@ -1,4 +1,4 @@
-# 🏢 ICS - Inventory Custodian System
+# 🏢 GSD Supply System
 
 **Fully Containerized | Cross-Platform | Production-Ready**
 
