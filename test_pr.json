@@ -1,0 +1,10 @@
+{
+  "pr_no": "2026-05-TEST",
+  "item_name": "Test Item",
+  "description": "Test Description",
+  "quantity": 5,
+  "unit": "pcs",
+  "unit_cost": 1000,
+  "office": "MARINA",
+  "division_section": "GSD"
+}

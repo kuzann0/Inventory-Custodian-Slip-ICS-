@@ -1,0 +1,14 @@
+{
+  "name": "ics/inventory-custodian",
+  "description": "Inventory Custodian Slip System with PHPMailer and Offline Authentication",
+  "type": "project",
+  "require": {
+    "php": ">=7.4",
+    "phpmailer/phpmailer": "^6.8"
+  },
+  "autoload": {
+    "psr-4": {
+      "ICS\\": "src/"
+    }
+  }
+}

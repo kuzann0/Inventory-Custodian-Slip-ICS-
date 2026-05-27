@@ -1,0 +1,14 @@
+{
+    "pr_id": 28,
+    "pr_no": "2026-01-001-03",
+    "property_description": "Test Laptop",
+    "category": "equipment",
+    "unit_of_measure": "pc",
+    "quantity": 1,
+    "unit_cost": 62000,
+    "total_cost": 62000,
+    "estimated_useful_life": 5,
+    "condition": "serviceable",
+    "serial_number": "ABC123",
+    "user_id": 2
+}
