@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Notice of Delivery</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #fff;
+      color: #000;
+      font-size: 12px;
+    }
+
+    .page {
+      width: 816px;
+      min-height: 1056px;
+      margin: 0 auto;
+      padding: 40px 50px 40px 50px;
+      background: #fff;
+    }
+
+    /* ── HEADER ── */
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .header img {
+      height: 80px;
+      width: auto;
+      object-fit: contain;
+    }
+
+    .header-text {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .header-text p {
+      font-size: 13px;
+      font-weight: bold;
+      line-height: 1.55;
+      letter-spacing: 0.01em;
+    }
+
+    /* ── TITLE ── */
+    .title {
+      text-align: center;
+      font-size: 14px;
+      font-weight: bold;
+      margin-bottom: 14px;
+      text-decoration: underline;
+      letter-spacing: 0.02em;
+    }
+
+    /* ── META FIELDS ── */
+    .meta-section {
+      border: 1px solid #000;
+      border-bottom: none;
+      width: 100%;
+    }
+
+    .meta-row {
+      display: flex;
+      border-bottom: 1px solid #000;
+    }
+
+    .meta-cell {
+      display: flex;
+      align-items: center;
+      padding: 3px 6px;
+      font-size: 12px;
+      font-weight: bold;
+      white-space: nowrap;
+    }
+
+    .meta-cell.label {
+      min-width: 70px;
+    }
+
+    .meta-cell.colon {
+      padding: 3px 2px;
+      min-width: 10px;
+    }
+
+    .meta-cell.value {
+      flex: 1;
+      font-weight: normal;
+      border-left: 1px solid #000;
+      min-height: 22px;
+    }
+
+    .meta-cell.value-right {
+      font-weight: normal;
+      border-left: 1px solid #000;
+      min-height: 22px;
+      min-width: 140px;
+    }
+
+    /* divider between left and right groups */
+    .meta-cell.right-label {
+      border-left: 1px solid #000;
+      min-width: 70px;
+    }
+
+    /* ── TABLE ── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      border: 1px solid #000;
+    }
+
+    table thead tr th {
+      border: 1px solid #000;
+      padding: 4px 6px;
+      font-size: 12px;
+      font-style: italic;
+      font-weight: bold;
+      text-align: center;
+      background: #fff;
+    }
+
+    table tbody tr td {
+      border: 1px solid #000;
+      padding: 3px 6px;
+      font-size: 12px;
+      height: 22px;
+      vertical-align: middle;
+    }
+
+    table tbody tr td.center {
+      text-align: center;
+    }
+
+    table tbody tr td.right {
+      text-align: right;
+    }
+
+    .grand-total-row td {
+      font-weight: bold;
+      font-size: 12px;
+    }
+
+    .grand-total-label {
+      text-align: right !important;
+    }
+
+    /* ── SIGNATURES ── */
+    .signatures {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 28px;
+      padding: 0 4px;
+    }
+
+    .sig-block {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .sig-block .sig-intro {
+      font-size: 12px;
+      margin-bottom: 36px;
+    }
+
+    .sig-block .sig-name {
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .sig-block .sig-role {
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <img src="../src/assets/NOD_LOGO_HEADER_no_bg.png" alt="MARINA Logo Header" />
+    <div class="header-text">
+      <p>REPUBLIC OF THE PHILIPPINES</p>
+      <p>DEPARTMENT OF TRANSPORTATION</p>
+      <p>MARITIME INDUSTRY AUTHORITY</p>
+    </div>
+  </div>
+
+  <!-- TITLE -->
+  <div class="title">NOTICE OF DELIVERY</div>
+
+  <!-- META FIELDS (Supplier / PR No. / SI No. rows) -->
+  <div class="meta-section">
+
+    <!-- Row 1: Supplier -->
+    <div class="meta-row">
+      <span class="meta-cell label">Supplier</span>
+      <span class="meta-cell colon">:</span>
+      <span class="meta-cell value" style="flex:1;"></span>
+    </div>
+
+    <!-- Row 2: PR No. | PR Date -->
+    <div class="meta-row">
+      <span class="meta-cell label">PR No.</span>
+      <span class="meta-cell colon">:</span>
+      <span class="meta-cell value" style="flex:1;"></span>
+      <span class="meta-cell right-label">PR Date</span>
+      <span class="meta-cell colon">:</span>
+      <span class="meta-cell value-right"></span>
+    </div>
+
+    <!-- Row 3: SI No. | DR No. -->
+    <div class="meta-row">
+      <span class="meta-cell label">SI No.</span>
+      <span class="meta-cell colon">:</span>
+      <span class="meta-cell value" style="flex:1;"></span>
+      <span class="meta-cell right-label">DR No.</span>
+      <span class="meta-cell colon">:</span>
+      <span class="meta-cell value-right"></span>
+    </div>
+
+  </div><!-- /.meta-section -->
+
+  <!-- MAIN TABLE -->
+  <table>
+    <thead>
+      <tr>
+        <th style="width:13%;">Date</th>
+        <th style="width:37%;">Particular</th>
+        <th style="width:10%;">Unit</th>
+        <th style="width:10%;">Qty</th>
+        <th style="width:15%;">Unit Cost</th>
+        <th style="width:15%;">Amount</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- 12 empty data rows -->
+      <tr><td></td><td></td><td class="center"></td><td class="center"></td><td class="right"></td><td class="right"></td></tr>
+      <tr><td></td><td></td><td class="center"></td><td class="center"></td><td class="right"></td><td class="right"></td></tr>
+      <tr><td></td><td></td><td class="center"></td><td class="center"></td><td class="right"></td><td class="right"></td></tr>
+      <tr><td></td><td></td><td class="center"></td><td class="center"></td><td class="right"></td><td class="right"></td></tr>
+      <tr><td></td><td></td><td class="center"></td><td class="center"></td><td class="right"></td><td class="right"></td></tr>
+      <tr><td></td><td></td><td class="center"></td><td class="center"></td><td class="right"></td><td class="right"></td></tr>
+      <tr><td></td><td></td><td class="center"></td><td class="center"></td><td class="right"></td><td class="right"></td></tr>
+      <tr><td></td><td></td><td class="center"></td><td class="center"></td><td class="right"></td><td class="right"></td></tr>
+      <tr><td></td><td></td><td class="center"></td><td class="center"></td><td class="right"></td><td class="right"></td></tr>
+      <tr><td></td><td></td><td class="center"></td><td class="center"></td><td class="right"></td><td class="right"></td></tr>
+      <tr><td></td><td></td><td class="center"></td><td class="center"></td><td class="right"></td><td class="right"></td></tr>
+      <tr><td></td><td></td><td class="center"></td><td class="center"></td><td class="right"></td><td class="right"></td></tr>
+
+      <!-- Grand Total row -->
+      <tr class="grand-total-row">
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td class="grand-total-label">GRAND TOTAL =</td>
+        <td class="right">0.00</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- SIGNATURES -->
+  <div class="signatures">
+    <div class="sig-block">
+      <span class="sig-intro">Prepared by:</span>
+      <span class="sig-name">LAWRENCE CARL P. PARCERO</span>
+      <span class="sig-role">Administrative Aide IV</span>
+      <span class="sig-role">General Services Division</span>
+    </div>
+    <div class="sig-block">
+      <span class="sig-intro">Noted by:</span>
+      <span class="sig-name">VIEN CONSTANTINE C. MESINA</span>
+      <span class="sig-role">Chief Admin Officer</span>
+      <span class="sig-role">General Services Division</span>
+    </div>
+  </div>
+
+</div><!-- /.page -->
+</body>
+</html>

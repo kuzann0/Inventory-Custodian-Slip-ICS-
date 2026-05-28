@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inspection and Acceptance Report</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    background: #d0d0d0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding: 30px 20px;
+    font-family: 'Times New Roman', Times, serif;
+  }
+
+  .page {
+    background: #fff;
+    width: 794px;
+    min-height: 1123px;
+    padding: 36px 40px 40px 40px;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.18);
+  }
+
+  /* Header */
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    margin-bottom: 6px;
+  }
+
+  .logos {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+
+  .logo-img {
+    width: 68px;
+    height: 68px;
+    object-fit: contain;
+  }
+
+  .header-text {
+    text-align: center;
+    line-height: 1.3;
+  }
+
+  .header-text .line1 {
+    font-size: 13.5px;
+    font-weight: bold;
+    letter-spacing: 0.03em;
+  }
+
+  .header-text .line2 {
+    font-size: 13.5px;
+    font-weight: bold;
+    letter-spacing: 0.03em;
+  }
+
+  .header-text .line3 {
+    font-size: 13.5px;
+    font-weight: bold;
+    letter-spacing: 0.03em;
+  }
+
+  .form-title {
+    text-align: center;
+    font-size: 15px;
+    font-weight: bold;
+    text-decoration: underline;
+    margin: 10px 0 12px 0;
+    letter-spacing: 0.04em;
+  }
+
+  /* Top info fields */
+  .info-grid {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 0;
+    border: 1.5px solid #000;
+    border-bottom: none;
+  }
+
+  .info-grid td {
+    font-size: 11.5px;
+    padding: 3px 6px;
+    vertical-align: middle;
+    border: 1px solid #000;
+    white-space: nowrap;
+  }
+
+  .info-grid .label {
+    font-weight: bold;
+    padding-right: 2px;
+    border-right: none;
+    white-space: nowrap;
+  }
+
+  .info-grid .colon {
+    padding: 3px 1px;
+    border-left: none;
+    border-right: none;
+  }
+
+  .info-grid .value-line {
+    width: 100%;
+    border-bottom: 1px solid #000;
+    display: inline-block;
+    min-width: 120px;
+  }
+
+  .info-grid .field-cell {
+    border-left: none;
+  }
+
+  /* Main items table */
+  .items-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1.5px solid #000;
+    border-top: none;
+  }
+
+  .items-table th {
+    border: 1.5px solid #000;
+    font-size: 11px;
+    font-weight: bold;
+    font-style: italic;
+    text-align: center;
+    padding: 3px 4px;
+    background: #fff;
+  }
+
+  .items-table td {
+    border: 1px solid #000;
+    font-size: 11px;
+    padding: 0;
+    height: 22px;
+  }
+
+  .col-stockno { width: 90px; }
+  .col-desc    { width: auto; }
+  .col-unit    { width: 70px; }
+  .col-qty     { width: 70px; }
+
+  /* Bottom inspection/acceptance section */
+  .bottom-section {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1.5px solid #000;
+    border-top: none;
+  }
+
+  .bottom-section td {
+    vertical-align: top;
+    padding: 0;
+  }
+
+  .insp-accept-header {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .insp-accept-header td {
+    font-size: 13px;
+    font-weight: bold;
+    font-style: italic;
+    text-align: center;
+    padding: 5px 0 4px 0;
+    border: 1.5px solid #000;
+    border-top: none;
+  }
+
+  .insp-accept-header .left-header {
+    border-left: none;
+    border-right: 1px solid #000;
+    width: 50%;
+  }
+
+  .insp-accept-header .right-header {
+    border-right: none;
+    width: 50%;
+  }
+
+  .insp-body {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1.5px solid #000;
+    border-top: none;
+  }
+
+  .insp-body td {
+    vertical-align: top;
+    padding: 8px 12px;
+    font-size: 11.5px;
+  }
+
+  .insp-body .left-col {
+    width: 50%;
+    border-right: 1px solid #000;
+    border-left: none;
+    border-bottom: none;
+  }
+
+  .insp-body .right-col {
+    width: 50%;
+    border-right: none;
+    border-bottom: none;
+  }
+
+  .date-line {
+    margin-bottom: 16px;
+    font-size: 11.5px;
+  }
+
+  .date-line span {
+    font-weight: bold;
+  }
+
+  .date-underline {
+    display: inline-block;
+    border-bottom: 1px solid #000;
+    min-width: 120px;
+    margin-left: 2px;
+  }
+
+  .checkbox-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+
+  .checkbox-box {
+    width: 30px;
+    height: 30px;
+    border: 1.5px solid #000;
+    flex-shrink: 0;
+    display: inline-block;
+    margin-top: 1px;
+  }
+
+  .checkbox-label {
+    font-size: 11.5px;
+    line-height: 1.3;
+    display: flex;
+    align-items: center;
+    min-height: 30px;
+  }
+
+  .insp-statement {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 0;
+  }
+
+  .insp-statement .checkbox-box {
+    margin-top: 2px;
+  }
+
+  .insp-statement .insp-text {
+    font-size: 11.5px;
+    line-height: 1.4;
+    text-align: center;
+  }
+
+  .sig-area {
+    margin-top: 18px;
+  }
+
+  .sig-line {
+    border-bottom: 1.5px solid #000;
+    width: 220px;
+    margin-bottom: 2px;
+  }
+
+  .sig-name {
+    font-size: 12px;
+    font-weight: bold;
+    text-decoration: underline;
+    text-align: center;
+    width: 220px;
+  }
+
+  .sig-title {
+    font-size: 11px;
+    text-align: center;
+    width: 220px;
+  }
+
+  /* SVG logos as inline placeholders */
+  .logo-placeholder {
+    width: 68px;
+    height: 68px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="logos">
+      <!-- Philippine Seal -->
+      <div class="logo-placeholder">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="68" height="68">
+          <circle cx="50" cy="50" r="48" fill="#fff" stroke="#000" stroke-width="1.5"/>
+          <circle cx="50" cy="50" r="42" fill="none" stroke="#0038a8" stroke-width="2"/>
+          <text x="50" y="18" text-anchor="middle" font-size="5.5" font-family="serif" fill="#0038a8" font-weight="bold">REPUBLIKA NG PILIPINAS</text>
+          <!-- Sun -->
+          <circle cx="50" cy="52" r="10" fill="#fcd116" stroke="#000" stroke-width="0.5"/>
+          <line x1="50" y1="38" x2="50" y2="34" stroke="#fcd116" stroke-width="1.5"/>
+          <line x1="50" y1="66" x2="50" y2="70" stroke="#fcd116" stroke-width="1.5"/>
+          <line x1="36" y1="52" x2="32" y2="52" stroke="#fcd116" stroke-width="1.5"/>
+          <line x1="64" y1="52" x2="68" y2="52" stroke="#fcd116" stroke-width="1.5"/>
+          <line x1="40.1" y1="42.1" x2="37.3" y2="39.3" stroke="#fcd116" stroke-width="1.5"/>
+          <line x1="59.9" y1="61.9" x2="62.7" y2="64.7" stroke="#fcd116" stroke-width="1.5"/>
+          <line x1="59.9" y1="42.1" x2="62.7" y2="39.3" stroke="#fcd116" stroke-width="1.5"/>
+          <line x1="40.1" y1="61.9" x2="37.3" y2="64.7" stroke="#fcd116" stroke-width="1.5"/>
+          <!-- Stars -->
+          <text x="22" y="45" text-anchor="middle" font-size="8" fill="#0038a8">★</text>
+          <text x="78" y="45" text-anchor="middle" font-size="8" fill="#0038a8">★</text>
+          <text x="50" y="80" text-anchor="middle" font-size="8" fill="#0038a8">★</text>
+          <!-- Eagle -->
+          <text x="50" y="57" text-anchor="middle" font-size="7" fill="#8B4513">🦅</text>
+          <text x="50" y="90" text-anchor="middle" font-size="4.5" font-family="serif" fill="#0038a8">BAGONG PILIPINAS</text>
+        </svg>
+      </div>
+      <!-- MARINA Logo -->
+      <div class="logo-placeholder">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="68" height="68">
+          <circle cx="50" cy="50" r="48" fill="#003087" stroke="#000" stroke-width="1"/>
+          <circle cx="50" cy="50" r="40" fill="#fff" stroke="#003087" stroke-width="1"/>
+          <text x="50" y="22" text-anchor="middle" font-size="7" font-family="serif" fill="#003087" font-weight="bold">MARINA</text>
+          <!-- Anchor -->
+          <line x1="50" y1="28" x2="50" y2="72" stroke="#003087" stroke-width="3"/>
+          <line x1="36" y1="36" x2="64" y2="36" stroke="#003087" stroke-width="2.5"/>
+          <path d="M36,72 Q50,80 64,72" stroke="#003087" stroke-width="2" fill="none"/>
+          <circle cx="50" cy="28" r="4" fill="none" stroke="#003087" stroke-width="2"/>
+          <line x1="36" y1="72" x2="36" y2="68" stroke="#003087" stroke-width="2"/>
+          <line x1="64" y1="72" x2="64" y2="68" stroke="#003087" stroke-width="2"/>
+          <!-- Waves -->
+          <path d="M30,55 Q37,51 44,55 Q51,59 58,55 Q65,51 72,55" stroke="#003087" stroke-width="1.5" fill="none"/>
+          <path d="M30,60 Q37,56 44,60 Q51,64 58,60 Q65,56 72,60" stroke="#003087" stroke-width="1.5" fill="none"/>
+          <text x="50" y="88" text-anchor="middle" font-size="5" font-family="serif" fill="#003087">MARITIME IND. AUTH.</text>
+        </svg>
+      </div>
+    </div>
+    <div class="header-text">
+      <div class="line1">REPUBLIC OF THE PHILIPPINES</div>
+      <div class="line2">DEPARTMENT OF TRANSPORTATION</div>
+      <div class="line3">MARITIME INDUSTRY AUTHORITY</div>
+    </div>
+  </div>
+
+  <div class="form-title">INSPECTION AND ACCEPTANCE REPORT</div>
+
+  <!-- TOP INFO FIELDS TABLE -->
+  <table class="info-grid" style="border-bottom:none;">
+    <colgroup>
+      <col style="width:155px;">
+      <col style="width:8px;">
+      <col>
+      <col style="width:90px;">
+      <col style="width:8px;">
+      <col style="width:130px;">
+    </colgroup>
+    <tbody>
+      <tr>
+        <td class="label" style="border-right:none;">Supplier</td>
+        <td class="colon" style="border-left:none;border-right:none;">:</td>
+        <td class="field-cell" style="border-left:none;border-right:1px solid #000;"></td>
+        <td class="label" style="border-right:none;">IAR No.</td>
+        <td class="colon" style="border-left:none;border-right:none;">:</td>
+        <td class="field-cell" style="border-left:none;border-right:none;"></td>
+      </tr>
+      <tr>
+        <td class="label" style="border-right:none;">PR No./Date</td>
+        <td class="colon" style="border-left:none;border-right:none;">:</td>
+        <td class="field-cell" style="border-left:none;border-right:1px solid #000;"></td>
+        <td class="label" style="border-right:none;">Date</td>
+        <td class="colon" style="border-left:none;border-right:none;">:</td>
+        <td class="field-cell" style="border-left:none;border-right:none;"></td>
+      </tr>
+      <tr>
+        <td class="label" style="border-right:none;">Requisitioning Office/Dept.</td>
+        <td class="colon" style="border-left:none;border-right:none;">:</td>
+        <td class="field-cell" style="border-left:none;border-right:1px solid #000;"></td>
+        <td class="label" style="border-right:none;">Invoice No.</td>
+        <td class="colon" style="border-left:none;border-right:none;">:</td>
+        <td class="field-cell" style="border-left:none;border-right:none;"></td>
+      </tr>
+      <tr>
+        <td class="label" style="border-right:none;">Responsibility Center Code</td>
+        <td class="colon" style="border-left:none;border-right:none;">:</td>
+        <td class="field-cell" style="border-left:none;border-right:1px solid #000;"></td>
+        <td class="label" style="border-right:none;">Date</td>
+        <td class="colon" style="border-left:none;border-right:none;">:</td>
+        <td class="field-cell" style="border-left:none;border-right:none;"></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ITEMS TABLE -->
+  <table class="items-table">
+    <colgroup>
+      <col class="col-stockno">
+      <col class="col-desc">
+      <col class="col-unit">
+      <col class="col-qty">
+    </colgroup>
+    <thead>
+      <tr>
+        <th style="border-left:none;border-top:none;">Stock/<br>Property No.</th>
+        <th style="border-top:none;"><em>Description</em></th>
+        <th style="border-top:none;">Unit</th>
+        <th style="border-top:none;border-right:none;">Quantity</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- 13 blank rows -->
+      <tr><td style="border-left:none;"></td><td></td><td></td><td style="border-right:none;"></td></tr>
+      <tr><td style="border-left:none;"></td><td></td><td></td><td style="border-right:none;"></td></tr>
+      <tr><td style="border-left:none;"></td><td></td><td></td><td style="border-right:none;"></td></tr>
+      <tr><td style="border-left:none;"></td><td></td><td></td><td style="border-right:none;"></td></tr>
+      <tr><td style="border-left:none;"></td><td></td><td></td><td style="border-right:none;"></td></tr>
+      <tr><td style="border-left:none;"></td><td></td><td></td><td style="border-right:none;"></td></tr>
+      <tr><td style="border-left:none;"></td><td></td><td></td><td style="border-right:none;"></td></tr>
+      <tr><td style="border-left:none;"></td><td></td><td></td><td style="border-right:none;"></td></tr>
+      <tr><td style="border-left:none;"></td><td></td><td></td><td style="border-right:none;"></td></tr>
+      <tr><td style="border-left:none;"></td><td></td><td></td><td style="border-right:none;"></td></tr>
+      <tr><td style="border-left:none;"></td><td></td><td></td><td style="border-right:none;"></td></tr>
+      <tr><td style="border-left:none;"></td><td></td><td></td><td style="border-right:none;"></td></tr>
+      <tr><td style="border-left:none;"></td><td></td><td></td><td style="border-right:none;"></td></tr>
+    </tbody>
+  </table>
+
+  <!-- INSPECTION / ACCEPTANCE HEADER -->
+  <table class="insp-accept-header">
+    <tr>
+      <td class="left-header" style="border-left:1.5px solid #000;"><em>INSPECTION</em></td>
+      <td class="right-header" style="border-right:1.5px solid #000;"><em>ACCEPTANCE</em></td>
+    </tr>
+  </table>
+
+  <!-- INSPECTION / ACCEPTANCE BODY -->
+  <table class="insp-body" style="border:1.5px solid #000;border-top:none;">
+    <tr>
+      <!-- LEFT: INSPECTION -->
+      <td class="left-col" style="border-left:1.5px solid #000;border-bottom:1.5px solid #000;padding:10px 16px 18px 16px;">
+        <div class="date-line">
+          <span>Date Inspected :</span>
+          <span class="date-underline">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+        </div>
+        <div class="insp-statement">
+          <div class="checkbox-box"></div>
+          <div class="insp-text">
+            Inspected, verified and found in order as to<br>quantity and specifications
+          </div>
+        </div>
+        <div class="sig-area" style="margin-top:28px;">
+          <div class="sig-line"></div>
+          <div class="sig-title" style="text-align:left;width:220px;">Inspection Officer/Inspection Committee</div>
+        </div>
+      </td>
+
+      <!-- RIGHT: ACCEPTANCE -->
+      <td class="right-col" style="border-right:1.5px solid #000;border-bottom:1.5px solid #000;padding:10px 16px 18px 16px;">
+        <div class="date-line">
+          <span>Date Accepted :</span>
+          <span class="date-underline">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+        </div>
+        <div class="checkbox-row">
+          <div class="checkbox-box"></div>
+          <div class="checkbox-label">Complete</div>
+        </div>
+        <div class="checkbox-row">
+          <div class="checkbox-box"></div>
+          <div class="checkbox-label">Partial (pls. specify quantity)</div>
+        </div>
+        <div class="sig-area" style="margin-top:10px;text-align:center;">
+          <div class="sig-name" style="width:100%;text-align:center;">IMELDA Q. RAMOS</div>
+          <div class="sig-title" style="width:100%;text-align:center;">Administrative Officer V</div>
+        </div>
+      </td>
+    </tr>
+  </table>
+
+</div>
+</body>
+</html>

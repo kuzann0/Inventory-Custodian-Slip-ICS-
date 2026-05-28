@@ -1,0 +1,438 @@
+import { useState } from 'react';
+import html2canvas from 'html2canvas';
+import { jsPDF } from 'jspdf';
+// If logo is in the same folder as this component:
+import MarinaLogo from './marinalogo.png';
+// If logo is in /public folder, replace above with:
+// const MarinaLogo = '/MARINA_LOGO.png';
+
+export default function PurchaseRequestStep2Preview({
+  office = '',
+  division = '',
+  prNo = '',
+  purpose = '',
+  particularItems = [],
+  name = '',
+  designation = '',
+  certification = null,
+  onBack,
+  onDownload,
+  onConfirm,
+}) {
+  const [isDownloading, setIsDownloading] = useState(false);
+
+  const calculateTotalCost = (item) => {
+    const qty = parseFloat(item.qty) || 0;
+    const unitCost = parseFloat(item.unitCost) || 0;
+    return (qty * unitCost).toFixed(2);
+  };
+
+  const handleDownloadPDF = async () => {
+    setIsDownloading(true);
+    try {
+      const element = document.getElementById('pr-preview-form');
+      const canvas = await html2canvas(element, { scale: 2, useCORS: true });
+      const imgData = canvas.toDataURL('image/jpeg', 0.98);
+      const pdf = new jsPDF({ unit: 'mm', format: 'a4', orientation: 'portrait' });
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = pdf.internal.pageSize.getHeight();
+      const canvasWidth = canvas.width;
+      const canvasHeight = canvas.height;
+      const ratio = Math.min(pdfWidth / canvasWidth, pdfHeight / canvasHeight);
+      const centeredX = (pdfWidth - canvasWidth * ratio) / 2;
+      const centeredY = (pdfHeight - canvasHeight * ratio) / 2;
+      pdf.addImage(imgData, 'JPEG', centeredX, centeredY, canvasWidth * ratio, canvasHeight * ratio);
+      pdf.save(`PR-${prNo}.pdf`);
+      if (onDownload) onDownload();
+    } catch (error) {
+      console.error('PDF download failed:', error);
+    } finally {
+      setIsDownloading(false);
+    }
+  };
+
+  // Always show at least 10 item rows
+  const MIN_ROWS = 10;
+  const emptyRows = Math.max(0, MIN_ROWS - particularItems.length);
+
+  const td = (extra = {}) => ({
+    border: '1px solid #000',
+    padding: '3px 5px',
+    fontSize: '11px',
+    fontFamily: 'Arial, Helvetica, sans-serif',
+    ...extra,
+  });
+
+  const labelTd = (width) => td({ width, verticalAlign: 'middle', whiteSpace: 'nowrap' });
+  const valueTd = (extra = {}) => td({ verticalAlign: 'middle', ...extra });
+
+  return (
+    <div style={{ padding: '20px', background: '#f0f0f0', minHeight: '100vh' }}>
+
+      {/* ── FORM ── */}
+      <div
+        id="pr-preview-form"
+        style={{
+          width: '720px',
+          margin: '0 auto',
+          background: '#fff',
+          padding: '28px 32px 24px',
+          fontFamily: 'Arial, Helvetica, sans-serif',
+          fontSize: '11px',
+          color: '#000',
+        }}
+      >
+
+        {/* Form meta top-right */}
+        <div style={{ textAlign: 'right', fontSize: '10px', lineHeight: 1.6, marginBottom: '6px' }}>
+          Form No. QMS-10/2-1<br />
+          Revision No./Date: 0/15 Nov 2010
+        </div>
+
+        {/* Header */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px', marginBottom: '8px' }}>
+          <img src={MarinaLogo} alt="MARINA" style={{ width: '72px', height: 'auto' }} />
+          <div style={{ textAlign: 'center', lineHeight: 1.65, fontSize: '11.5px' }}>
+            Republic of the Philippines<br />
+            Department of Transportation<br />
+            <strong style={{ fontSize: '12px' }}>MARITIME INDUSTRY AUTHORITY</strong>
+          </div>
+        </div>
+
+        {/* Title */}
+        <div style={{ textAlign: 'center', fontWeight: 'bold', fontSize: '12px', textDecoration: 'underline', marginBottom: '10px', letterSpacing: '0.5px' }}>
+          PURCHASE REQUEST
+        </div>
+
+        {/* ── OUTER TABLE ── */}
+        <table style={{ width: '100%', borderCollapse: 'collapse', border: '1.5px solid #000' }}>
+          <tbody>
+
+            {/* Row 1 — Office / PR No / SAI No */}
+            <tr>
+              <td style={{ padding: 0, borderBottom: '1px solid #000' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                  <tbody>
+                    <tr>
+                      {/* Left: Office + Division */}
+                      <td style={{ width: '58%', padding: '5px 8px', borderRight: '1px solid #000', verticalAlign: 'top' }}>
+                        <div style={{ marginBottom: '4px', fontSize: '11px' }}>
+                          Office:&nbsp;
+                          <span style={{ display: 'inline-block', borderBottom: '1px solid #000', minWidth: '200px' }}>{office}</span>
+                        </div>
+                        <div style={{ fontSize: '11px' }}>
+                          Division/Section:&nbsp;
+                          <span style={{ display: 'inline-block', borderBottom: '1px solid #000', minWidth: '150px' }}>{division}</span>
+                        </div>
+                      </td>
+                      {/* Right: PR No + SAI No */}
+                      <td style={{ padding: '5px 8px', verticalAlign: 'top' }}>
+                        <div style={{ marginBottom: '4px', fontSize: '11px' }}>
+                          PR No. :&nbsp;
+                          <span style={{ display: 'inline-block', borderBottom: '1px solid #000', minWidth: '120px' }}>{prNo}</span>
+                        </div>
+                        <div style={{ fontSize: '11px' }}>
+                          SAI No.:&nbsp;
+                          <span style={{ display: 'inline-block', borderBottom: '1px solid #000', minWidth: '120px' }}>&nbsp;</span>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+
+            {/* Row 2 — Items grid */}
+            <tr>
+              <td style={{ padding: 0, borderBottom: '1px solid #000' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                  <thead>
+                    <tr style={{ borderBottom: '1px solid #000' }}>
+                      <th style={td({ width: '7%', textAlign: 'center', fontWeight: 'bold', borderRight: '1px solid #000' })}>
+                        Item<br />No.
+                      </th>
+                      <th style={td({ width: '8%', textAlign: 'center', fontWeight: 'bold', borderRight: '1px solid #000' })}>
+                        Unit
+                      </th>
+                      <th style={td({ width: '45%', textAlign: 'center', fontWeight: 'bold', borderRight: '1px solid #000' })}>
+                        Item Description
+                      </th>
+                      <th style={td({ width: '9%', textAlign: 'center', fontWeight: 'bold', borderRight: '1px solid #000' })}>
+                        Qty
+                      </th>
+                      <th style={td({ width: '14%', textAlign: 'center', fontWeight: 'bold', borderRight: '1px solid #000' })}>
+                        Unit Cost
+                      </th>
+                      <th style={td({ width: '14%', textAlign: 'center', fontWeight: 'bold' })}>
+                        Total Cost
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {particularItems.map((item, idx) => (
+                      <tr key={idx} style={{ height: '22px', borderBottom: '1px solid #000' }}>
+                        <td style={td({ textAlign: 'center', borderRight: '1px solid #000' })}>{idx + 1}</td>
+                        <td style={td({ textAlign: 'center', borderRight: '1px solid #000' })}>{item.unit || ''}</td>
+                        <td style={td({ borderRight: '1px solid #000' })}>{item.description || ''}</td>
+                        <td style={td({ textAlign: 'center', borderRight: '1px solid #000' })}>{item.qty || ''}</td>
+                        <td style={td({ textAlign: 'right', borderRight: '1px solid #000' })}>{parseFloat(item.unitCost || 0).toFixed(2)}</td>
+                        <td style={td({ textAlign: 'right' })}>{calculateTotalCost(item)}</td>
+                      </tr>
+                    ))}
+                    {Array.from({ length: emptyRows }).map((_, idx) => (
+                      <tr key={`e-${idx}`} style={{ height: '22px', borderBottom: '1px solid #000' }}>
+                        <td style={td({ borderRight: '1px solid #000' })}>&nbsp;</td>
+                        <td style={td({ borderRight: '1px solid #000' })}>&nbsp;</td>
+                        <td style={td({ borderRight: '1px solid #000' })}>&nbsp;</td>
+                        <td style={td({ borderRight: '1px solid #000' })}>&nbsp;</td>
+                        <td style={td({ borderRight: '1px solid #000' })}>&nbsp;</td>
+                        <td style={td({})}>&nbsp;</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+
+            {/* Row 3 — "Requisitioning Officer" label (right-aligned, after item col boundary) */}
+            <tr>
+              <td style={{ padding: 0, borderBottom: '1px solid #000' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                  <tbody>
+                    <tr>
+                      {/* blank left ~60% matches item cols */}
+                      <td style={{ width: '60%', borderRight: '1px solid #000', padding: '4px 5px' }}>&nbsp;</td>
+                      <td style={{ textAlign: 'center', padding: '4px 5px', fontSize: '11px' }}>
+                        Requisitioning Officer
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+
+            {/* Row 4 — Signature */}
+            <tr>
+              <td style={{ padding: 0, borderBottom: '1px solid #000' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                  <tbody>
+                    <tr style={{ height: '24px' }}>
+                      <td style={labelTd('130px')}>Signature:</td>
+                      <td style={valueTd()}>&nbsp;</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+
+            {/* Row 5 — Printed Name */}
+            <tr>
+              <td style={{ padding: 0, borderBottom: '1px solid #000' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                  <tbody>
+                    <tr style={{ height: '24px' }}>
+                      <td style={labelTd('130px')}>Printed Name:</td>
+                      <td style={valueTd({ textAlign: 'center', fontWeight: 'bold', fontSize: '12px' })}>
+                        {name}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+
+            {/* Row 6 — Designation */}
+            <tr>
+              <td style={{ padding: 0, borderBottom: '1px solid #000' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                  <tbody>
+                    <tr style={{ height: '24px' }}>
+                      <td style={labelTd('130px')}>Designation</td>
+                      <td style={valueTd({ textAlign: 'center' })}>{designation}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+
+            {/* Row 7 — Purpose */}
+            <tr>
+              <td style={{ padding: '4px 8px', borderBottom: '1px solid #000', fontSize: '11px' }}>
+                <strong>Purpose</strong>&nbsp;&nbsp;{purpose}
+              </td>
+            </tr>
+
+            {/* Row 8 — CERTIFICATION header */}
+            <tr>
+              <td style={{
+                textAlign: 'center',
+                fontWeight: 'bold',
+                fontSize: '11.5px',
+                padding: '5px 8px',
+                borderBottom: '1px solid #000',
+                letterSpacing: '0.5px',
+              }}>
+                CERTIFICATION
+              </td>
+            </tr>
+
+            {/* Row 9 — Funds available + Budget officer name */}
+            <tr>
+              <td style={{ padding: 0, borderBottom: '1px solid #000' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                  <tbody>
+                    <tr>
+                      <td style={{ width: '55%', padding: '8px 20px', verticalAlign: 'top', fontSize: '11px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '5px' }}>
+                          <input
+                            type="checkbox"
+                            checked={certification === true}
+                            onChange={() => {}}
+                            style={{ width: '13px', height: '13px', margin: 0 }}
+                          />
+                          <span>FUNDS AVAILABLE</span>
+                        </div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          <input
+                            type="checkbox"
+                            checked={certification === false}
+                            onChange={() => {}}
+                            style={{ width: '13px', height: '13px', margin: 0 }}
+                          />
+                          <span>NO FUNDS AVAILABLE</span>
+                        </div>
+                      </td>
+                      <td style={{ padding: '10px 12px', verticalAlign: 'bottom', textAlign: 'right' }}>
+                        <div style={{ fontWeight: 'bold', fontSize: '12px' }}>DAN HENRY V. RAMIREZ</div>
+                        <div style={{ fontSize: '11px' }}>Chief, Budget Division</div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+
+            {/* Row 10 — Approved / Disapproved checkboxes */}
+            <tr>
+              <td style={{ padding: 0, borderBottom: '1px solid #000' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                  <tbody>
+                    <tr style={{ height: '26px' }}>
+                      <td style={{ width: '36%', borderRight: '1px solid #000', padding: '4px 8px' }}>&nbsp;</td>
+                      <td style={{ padding: '4px 8px', fontSize: '11px' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
+                          <span>
+                            <input type="checkbox" onChange={() => {}} style={{ width: '12px', height: '12px', marginRight: '4px' }} />
+                            <strong>Approved</strong>
+                          </span>
+                          <span>
+                            <input type="checkbox" onChange={() => {}} style={{ width: '12px', height: '12px', marginRight: '4px' }} />
+                            <strong>Disapproved</strong>
+                          </span>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+
+            {/* Row 11 — Admin Signature + Printed Name */}
+            <tr>
+              <td style={{ padding: 0, borderBottom: '1px solid #000' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                  <tbody>
+                    <tr style={{ height: '46px' }}>
+                      <td style={{ width: '36%', borderRight: '1px solid #000', padding: '3px 8px', fontSize: '11px', verticalAlign: 'top' }}>
+                        Signature:<br />Printed Name:
+                      </td>
+                      <td style={{ padding: '3px 8px', textAlign: 'center', fontWeight: 'bold', fontSize: '12px', verticalAlign: 'middle' }}>
+                        SONIA B. MALALUAN
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+
+            {/* Row 12 — Admin Designation */}
+            <tr>
+              <td style={{ padding: 0, borderBottom: '1px solid #000' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                  <tbody>
+                    <tr style={{ height: '24px' }}>
+                      <td style={{ width: '36%', borderRight: '1px solid #000', padding: '3px 8px', fontSize: '11px', verticalAlign: 'middle' }}>
+                        Designation
+                      </td>
+                      <td style={{ padding: '3px 8px', textAlign: 'center', fontSize: '11px', verticalAlign: 'middle' }}>
+                        Administrator
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+
+            {/* Row 13 — Note */}
+            <tr>
+              <td style={{ padding: '5px 10px', fontSize: '10.5px', fontStyle: 'italic', lineHeight: 1.5 }}>
+                <strong style={{ fontStyle: 'normal' }}>Note:</strong>&nbsp;&nbsp;
+                Please indicate a specific purpose other than "for official use of the Office." (e.g. monthly regular supplies, as per APP. special projects, etc.)
+              </td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+      {/* ── ACTION BUTTONS ── */}
+      <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', marginTop: '24px' }}>
+        <button
+          onClick={onBack}
+          style={{
+            padding: '10px 22px',
+            background: '#f1f5f9',
+            border: '1px solid #cbd5e1',
+            borderRadius: '6px',
+            cursor: 'pointer',
+            fontSize: '14px',
+            fontFamily: 'Arial, sans-serif',
+          }}
+        >
+          ← Back
+        </button>
+        <button
+          onClick={handleDownloadPDF}
+          disabled={isDownloading}
+          style={{
+            padding: '10px 22px',
+            background: '#e0f5ec',
+            border: '1px solid #1a8c5b',
+            borderRadius: '6px',
+            cursor: isDownloading ? 'not-allowed' : 'pointer',
+            fontSize: '14px',
+            color: '#1a8c5b',
+            fontFamily: 'Arial, sans-serif',
+          }}
+        >
+          {isDownloading ? '⏳ Generating PDF…' : '⬇ Download PDF'}
+        </button>
+        <button
+          onClick={onConfirm}
+          style={{
+            padding: '10px 22px',
+            background: '#051b50',
+            border: 'none',
+            borderRadius: '6px',
+            color: '#fff',
+            cursor: 'pointer',
+            fontSize: '14px',
+            fontFamily: 'Arial, sans-serif',
+          }}
+        >
+          Confirm & Continue →
+        </button>
+      </div>
+    </div>
+  );
+}
